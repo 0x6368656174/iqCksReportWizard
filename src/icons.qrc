@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/disk-black.png</file>
+        <file>icons/door-open.png</file>
+        <file>icons/eraser.png</file>
+        <file>icons/folder-horizontal-open.png</file>
+        <file>icons/qt.png</file>
+        <file>icons/bug.png</file>
+        <file>icons/information-white.png</file>
+        <file>icons/wrench-screwdriver.png</file>
+        <file>icons/magnifier.png</file>
+        <file>icons/calendar.png</file>
+        <file>icons/ic_receipt_black_48dp.png</file>
+    </qresource>
+</RCC>

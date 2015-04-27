@@ -1,0 +1,3 @@
+[submodule "src/IqOrm"]
+	path = IqOrm
+	url = https://github.com/ItQuasarOrg/IqOrm.git
