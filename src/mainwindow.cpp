@@ -1,3 +1,5 @@
+#define DATABASENAME "dbconnections"
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QTreeView>
@@ -15,12 +17,13 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     m_sqlLogDialog(new SqlLogDialog(this)),
+    m_logDialog(new LogDialog(this)),
     m_splitter(new QSplitter(this))
 {
     ui->setupUi(this);
     QSettings settings;
 
-    QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL");
+    QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", DATABASENAME);
     settings.beginGroup("databaseConfig");
     db.setHostName(settings.value("host", "localhost").toString());
     db.setPort(settings.value("port", 5432).toInt());
@@ -34,15 +37,14 @@ MainWindow::MainWindow(QWidget *parent) :
     IqOrmCore::setDataSource(ds);
     m_sqlLogDialog->setSqlOperationTracerLog(ds->tracerLog());
 
-    ArchiveRecord r;
-    r.load(331545);
-
     ui->filtersWidget->setMainWindow(this);
     ui->filtersWidget->setFindModel(ui->resultWidget->findModel());
 
     connect(ui->actionSettings, &QAction::triggered,
             this, &MainWindow::showConfigDialog);
 
+    connect(ui->actionLog, &QAction::triggered,
+            m_logDialog, &LogDialog::show);
     connect(ui->actionSQL_Log, &QAction::triggered,
             m_sqlLogDialog, &SqlLogDialog::show);
 
@@ -79,7 +81,19 @@ void MainWindow::showConfigDialog()
     ConfigDialog *configDialog = new ConfigDialog(this);
     connect(configDialog, &ConfigDialog::finished,
             configDialog, &ConfigDialog::deleteLater);
-    configDialog->show();
+    if(configDialog->exec()) {
+        QSqlDatabase db = QSqlDatabase::database(DATABASENAME);
+        db.close();
+
+        QSettings settings;
+        settings.beginGroup("databaseConfig");
+        db.setHostName(settings.value("host", "localhost").toString());
+        db.setPort(settings.value("port", 5432).toInt());
+        db.setUserName(settings.value("user", "postgres").toString());
+        db.setPassword(settings.value("password").toString());
+        db.setDatabaseName(settings.value("databaseName", "cks").toString());
+        settings.endGroup();
+    }
 }
 
 void MainWindow::loadSettings()
@@ -111,7 +125,8 @@ void MainWindow::openFilters()
     QFileInfo fileInfo (fileName);
     settins.setValue("lastOpenFiltersDir", fileInfo.path());
 
-    ui->filtersWidget->load(fileName);
+    if (!fileName.isEmpty())
+        ui->filtersWidget->load(fileName);
 }
 
 void MainWindow::saveFilters()
@@ -122,7 +137,8 @@ void MainWindow::saveFilters()
     QFileInfo fileInfo (fileName);
     settins.setValue("lastOpenFiltersDir", fileInfo.path());
 
-    ui->filtersWidget->save(fileName);
+    if (!fileName.isEmpty())
+        ui->filtersWidget->save(fileName);
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)

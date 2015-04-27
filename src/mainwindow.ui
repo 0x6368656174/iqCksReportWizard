@@ -61,7 +61,7 @@
      <x>0</x>
      <y>0</y>
      <width>784</width>
-     <height>29</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -74,6 +74,7 @@
     <property name="title">
      <string>&amp;Service</string>
     </property>
+    <addaction name="actionLog"/>
     <addaction name="actionSQL_Log"/>
     <addaction name="actionSettings"/>
    </widget>
@@ -185,6 +186,15 @@
    </property>
    <property name="text">
     <string>&amp;Save</string>
+   </property>
+  </action>
+  <action name="actionLog">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/bug.png</normaloff>:/icons/bug.png</iconset>
+   </property>
+   <property name="text">
+    <string>Main Log</string>
    </property>
   </action>
  </widget>

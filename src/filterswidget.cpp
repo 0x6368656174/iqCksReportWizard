@@ -45,8 +45,24 @@ void FiltersWidget::find() const
                                  tr("Search without filters can take a very long time. Continue?")) != QMessageBox::Yes)
             return;
     }
+
+    IqOrmFilter *archiveFromFilter = new IqOrmFilter();
+    archiveFromFilter->setProperty("dateTime");
+    archiveFromFilter->setOperation(IqOrmFilter::GreaterOrEquals);
+    archiveFromFilter->setValue(ui->archiveFromDateTimeEdit->dateTime());
+
+    IqOrmFilter *archiveToFilter = new IqOrmFilter();
+    archiveToFilter->setProperty("dateTime");
+    archiveToFilter->setOperation(IqOrmFilter::LessOrEquals);
+    archiveToFilter->setValue(ui->archiveToDateTimeEdit->dateTime());
+
+    IqOrmAndGroupFilter *groupFilter = new IqOrmAndGroupFilter();
+    groupFilter->add(archiveFromFilter);
+    groupFilter->add(archiveToFilter);
+    groupFilter->add(rootFilter);
+
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-    m_findModel->setFilters(rootFilter);
+    m_findModel->setFilters(groupFilter);
     m_findModel->load();
     QApplication::restoreOverrideCursor();
 }
@@ -232,25 +248,7 @@ IqOrmAbstractFilter *FiltersWidget::createFilter(const FilterItem *filterItem) c
     }
     }
 
-    if (!filter)
-        return Q_NULLPTR;
-
-    IqOrmFilter *archiveFromFilter = new IqOrmFilter();
-    archiveFromFilter->setProperty("dateTime");
-    archiveFromFilter->setOperation(IqOrmFilter::GreaterOrEquals);
-    archiveFromFilter->setValue(ui->archiveFromDateTimeEdit->dateTime());
-
-    IqOrmFilter *archiveToFilter = new IqOrmFilter();
-    archiveToFilter->setProperty("dateTime");
-    archiveToFilter->setOperation(IqOrmFilter::LessOrEquals);
-    archiveToFilter->setValue(ui->archiveToDateTimeEdit->dateTime());
-
-    IqOrmAndGroupFilter *groupFilter = new IqOrmAndGroupFilter();
-    groupFilter->add(archiveFromFilter);
-    groupFilter->add(archiveToFilter);
-    groupFilter->add(filter);
-
-    return groupFilter;
+    return filter;
 }
 
 QJsonObject FiltersWidget::createFilterJson(const FilterItem *filterItem) const

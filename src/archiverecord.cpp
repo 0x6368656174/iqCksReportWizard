@@ -12,7 +12,7 @@ ArchiveRecord::~ArchiveRecord()
 
 void ArchiveRecord::initializeOrmMetaModel(IqOrmMetaModel *model) const
 {
-    model->setTableName("archive_2014_07");
+    model->setTableName("archive");
     model->setPropertyColumn("channelName", "channel_name");
     model->setPropertyColumn("channelNumber", "channel_num");
     model->setPropertyColumn("headerInfo", "header_info");

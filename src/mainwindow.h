@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "sqllogdialog.h"
+#include "logdialog.h"
 #include <QSplitter>
 
 namespace Ui {
@@ -29,6 +30,7 @@ private:
 private:
     Ui::MainWindow *ui;
     SqlLogDialog *m_sqlLogDialog;
+    LogDialog *m_logDialog;
     QSplitter *m_splitter;
 };
 

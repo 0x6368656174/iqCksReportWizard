@@ -165,29 +165,34 @@ void FilterItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model
 
 void FilterItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    auto paintComboBox = [painter, option, index](const QMap<int, QString> &values){
+    auto paintComboBox = [painter, option, index, this](const QMap<int, QString> &values){
         int value = index.model()->data(index, Qt::DisplayRole).toInt();
         Q_ASSERT(values.contains(value));
         QString text = values[value];
 
+        QStyleOptionViewItem textOption (option);
+        QRect textRect = option.rect;
+        textRect.setWidth(option.rect.width() - 20);
+        textOption.rect = textRect;
+        textOption.text = text;
+        QStyledItemDelegate::paint(painter, textOption, QModelIndex());
+
+#ifndef Q_OS_WIN
         QStyleOptionViewItem backgroundOption (option);
         QRect backgroundRect = option.rect;
         backgroundRect.setX(option.rect.x() + option.rect.width() - 20);
         backgroundOption.rect = backgroundRect;
         QApplication::style()->drawPrimitive(QStyle::PE_PanelItemViewItem,
                                              &backgroundOption, painter);
-
-        QStyleOptionViewItem textOption (option);
-        QRect textRect = option.rect;
-        textRect.setWidth(textRect.width() - backgroundRect.width());
-        textOption.rect = textRect;
-        textOption.text = text;
-        QApplication::style()->drawControl(QStyle::CE_ItemViewItem,
-                                           &textOption, painter);
+#endif
 
         QStyleOptionComboBox comboBoxOption;
         comboBoxOption.palette = option.palette;
-        comboBoxOption.rect = option.rect;
+        QRect comboBoxRect = option.rect;
+#ifdef Q_OS_WIN
+        comboBoxRect.setX(option.rect.x() + option.rect.width() - 20);
+#endif
+        comboBoxOption.rect = comboBoxRect;
         comboBoxOption.frame = false;
         comboBoxOption.state = option.state;
         comboBoxOption.currentText = text;

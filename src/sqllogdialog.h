@@ -19,7 +19,7 @@ public:
 
     void setSqlOperationTracerLog(IqOrmSqlOperationTracerLog *sqlOperationTracerLog);
 
-private:
+private slots:
     void saveSqlBeginTransactionToTraceLog(bool ok,
                                             const QString &error);
 

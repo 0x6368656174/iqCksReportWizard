@@ -17,12 +17,29 @@ SqlLogDialog::~SqlLogDialog()
 
 void SqlLogDialog::setSqlOperationTracerLog(IqOrmSqlOperationTracerLog *sqlOperationTracerLog)
 {
-    connect(sqlOperationTracerLog, &IqOrmSqlOperationTracerLog::beginTransaction, this, &SqlLogDialog::saveSqlBeginTransactionToTraceLog, Qt::QueuedConnection);
-    connect(sqlOperationTracerLog, &IqOrmSqlOperationTracerLog::commitTransaction, this, &SqlLogDialog::saveSqlCommitTransactionToTraceLog, Qt::QueuedConnection);
-    connect(sqlOperationTracerLog, &IqOrmSqlOperationTracerLog::rollbackTransaction, this, &SqlLogDialog::saveSqlRollbackTransactionToTraceLog, Qt::QueuedConnection);
-    connect(sqlOperationTracerLog, &IqOrmSqlOperationTracerLog::prepareQuery, this, &SqlLogDialog::saveSqlPrepereQueryToTraceLog, Qt::QueuedConnection);
-    connect(sqlOperationTracerLog, &IqOrmSqlOperationTracerLog::execQuery, this, &SqlLogDialog::saveSqlExecQueryToTraceLog, Qt::QueuedConnection);
-    connect(sqlOperationTracerLog, &IqOrmSqlOperationTracerLog::execPreparedQuery, this, &SqlLogDialog::saveSqlExecPreparedQueryToTraceLog, Qt::QueuedConnection);
+    if (sqlOperationTracerLog) {
+#ifdef Q_OS_WIN
+        connect(sqlOperationTracerLog, SIGNAL(beginTransaction(bool,QString)),
+                this, SLOT(saveSqlBeginTransactionToTraceLog(bool,QString)));
+        connect(sqlOperationTracerLog, SIGNAL(commitTransaction(bool,QString)),
+                this, SLOT(saveSqlCommitTransactionToTraceLog(bool,QString)));
+        connect(sqlOperationTracerLog, SIGNAL(rollbackTransaction(bool,QString)),
+                this, SLOT(saveSqlRollbackTransactionToTraceLog(bool,QString)));
+        connect(sqlOperationTracerLog, SIGNAL(prepareQuery(QString,qint32,bool,QString)),
+                this, SLOT(saveSqlPrepereQueryToTraceLog(QString,qint32,bool,QString)));
+        connect(sqlOperationTracerLog, SIGNAL(execQuery(QString,qint32,bool,QString)),
+                this, SLOT(saveSqlExecQueryToTraceLog(QString,qint32,bool,QString)));
+        connect(sqlOperationTracerLog, SIGNAL(execPreparedQuery(QVariantList,qint32,bool,QString)),
+                this, SLOT(saveSqlExecPreparedQueryToTraceLog(QVariantList,qint32,bool,QString)));
+#else
+        connect(sqlOperationTracerLog, &IqOrmSqlOperationTracerLog::beginTransaction, this, &SqlLogDialog::saveSqlBeginTransactionToTraceLog, Qt::QueuedConnection);
+        connect(sqlOperationTracerLog, &IqOrmSqlOperationTracerLog::commitTransaction, this, &SqlLogDialog::saveSqlCommitTransactionToTraceLog, Qt::QueuedConnection);
+        connect(sqlOperationTracerLog, &IqOrmSqlOperationTracerLog::rollbackTransaction, this, &SqlLogDialog::saveSqlRollbackTransactionToTraceLog, Qt::QueuedConnection);
+        connect(sqlOperationTracerLog, &IqOrmSqlOperationTracerLog::prepareQuery, this, &SqlLogDialog::saveSqlPrepereQueryToTraceLog, Qt::QueuedConnection);
+        connect(sqlOperationTracerLog, &IqOrmSqlOperationTracerLog::execQuery, this, &SqlLogDialog::saveSqlExecQueryToTraceLog, Qt::QueuedConnection);
+        connect(sqlOperationTracerLog, &IqOrmSqlOperationTracerLog::execPreparedQuery, this, &SqlLogDialog::saveSqlExecPreparedQueryToTraceLog, Qt::QueuedConnection);
+#endif
+    }
 }
 
 void SqlLogDialog::saveSqlBeginTransactionToTraceLog(bool ok, const QString &error)
@@ -32,7 +49,7 @@ void SqlLogDialog::saveSqlBeginTransactionToTraceLog(bool ok, const QString &err
     if (ok)
         logRecord = tr("BEGIN TRANSACTION - Ok\n");
     else
-        logRecord = tr("BEGIN TRANSACTION - Error: %0\n")
+        logRecord = tr("BEGIN TRANSACTION - Error\nError: %0\n")
                 .arg(error);
 
     ui->sqlTraceLogTextEdit->append(logRecord);
@@ -46,7 +63,7 @@ void SqlLogDialog::saveSqlCommitTransactionToTraceLog(bool ok,
     if (ok)
         logRecord = tr("COMMIT TRANSACTION - Ok\n");
     else
-        logRecord = tr("COMMIT TRANSACTION - Error: %0\n")
+        logRecord = tr("COMMIT TRANSACTION - Error\nError: %0\n")
                 .arg(error);
     logRecord.append("------------------------------------------\n");
 
@@ -61,7 +78,7 @@ void SqlLogDialog::saveSqlRollbackTransactionToTraceLog(bool ok,
     if (ok)
         logRecord = tr("ROLLBACK TRANSACTION - Ok\n");
     else
-        logRecord = tr("ROLLBACK TRANSACTION - Error: %0\n")
+        logRecord = tr("ROLLBACK TRANSACTION - Error\nError: %0\n")
                 .arg(error);
     logRecord.append("------------------------------------------\n");
 
@@ -80,7 +97,7 @@ void SqlLogDialog::saveSqlPrepereQueryToTraceLog(const QString &query,
                 .arg(query)
                 .arg(elapsed);
     else
-        logRecord = tr("PREPARE %0 - Error (%1 ms): %2\n")
+        logRecord = tr("PREPARE %0 - Error (%1 ms)\nError: %2\n")
                 .arg(query)
                 .arg(elapsed)
                 .arg(error);
@@ -100,7 +117,7 @@ void SqlLogDialog::saveSqlExecQueryToTraceLog(const QString &query,
                 .arg(query)
                 .arg(elapsed);
     else
-        logRecord = tr("EXEC %0 - Error (%1 ms): %2\n")
+        logRecord = tr("EXEC %0 - Error (%1 ms)\nError: %2\n")
                 .arg(query)
                 .arg(elapsed)
                 .arg(error);
@@ -128,7 +145,7 @@ void SqlLogDialog::saveSqlExecPreparedQueryToTraceLog(const QVariantList &bindVa
                 .arg(bindStringList.join(", "))
                 .arg(elapsed);
     else
-        logRecord = tr("EXEC PREPARED%0 %1 - Error (%2 ms): %3\n")
+        logRecord = tr("EXEC PREPARED%0 %1 - Error (%2 ms)\nError : %3\n")
                 .arg(bindStringList.isEmpty()?"":tr(" with"))
                 .arg(bindStringList.join(", "))
                 .arg(elapsed)
