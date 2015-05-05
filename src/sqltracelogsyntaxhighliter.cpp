@@ -36,7 +36,7 @@ SqlTraceLogSyntaxHighliter::SqlTraceLogSyntaxHighliter(QObject *parent) :
     m_highlightingRules.append(rule);
 
     m_errorFormat.setForeground(QBrush("red"));
-    rule.pattern = QRegExp("\\bError\\b");
+    rule.pattern = QRegExp(tr("\\bError\\b"));
     rule.format = m_errorFormat;
     m_highlightingRules.append(rule);
     rule.pattern = QRegExp("SQL Error");

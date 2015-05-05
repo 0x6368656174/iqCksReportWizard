@@ -93,6 +93,31 @@ int FilterItem::childCount() const
     return m_childFilters.count();
 }
 
+QMetaType::Type FilterItem::propertyType() const
+{
+    return propertyType(property());
+}
+
+QMetaType::Type FilterItem::propertyType(Properties property) const
+{
+    switch (property) {
+    case NotSetPorperty:
+        return QMetaType::UnknownType;
+        break;
+    case DateTime:
+        return QMetaType::QDateTime;
+        break;
+    case Number:
+        return QMetaType::Int;
+        break;
+    default:
+        return QMetaType::QString;
+        break;
+    }
+
+    return QMetaType::UnknownType;
+}
+
 int FilterItem::row() const
 {
     if (!parentFilter())

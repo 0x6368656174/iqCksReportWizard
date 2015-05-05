@@ -57,6 +57,10 @@ public:
 
     int childCount() const;
 
+    QMetaType::Type propertyType() const;
+
+    QMetaType::Type propertyType(Properties property) const;
+
     int row() const;
 
 public:

@@ -1,4 +1,5 @@
 #include "filtersmodel.h"
+#include <QDateTime>
 
 FiltersModel::FiltersModel(QObject *parent) :
     QAbstractItemModel(parent),
@@ -288,9 +289,56 @@ bool FiltersModel::setData(const QModelIndex &index, const QVariant &value, int 
         case TypeColumn:
             filter->setType(static_cast<FilterItem::Type>(value.toInt()));
             break;
-        case PropertyColumn:
+        case PropertyColumn: {
+            QMetaType::Type oldType = filter->propertyType();
+            QMetaType::Type newType = filter->propertyType(static_cast<FilterItem::Properties>(value.toInt()));
+            if (newType == QMetaType::QDateTime
+                    && oldType != newType)
+                filter->setValue(QDateTime::currentDateTime());
+            if (newType == QMetaType::Int
+                    && oldType != newType)
+                filter->setValue(0);
+            if (newType == QMetaType::QString
+                    && oldType != newType)
+                filter->setValue("");
+
+            switch (newType) {
+            case QMetaType::QDateTime:
+            case QMetaType::Int:
+                switch (filter->operation()) {
+                case FilterItem::NotSetOperation:
+                case FilterItem::Equals:
+                case FilterItem::NotEquals:
+                case FilterItem::Greater:
+                case FilterItem::GreaterOrEquals:
+                case FilterItem::Less:
+                case FilterItem::LessOrEquals:
+                    break;
+                default:
+                    filter->setOperation(FilterItem::NotSetOperation);
+                    break;
+                }
+                break;
+            case QMetaType::QString:
+                switch (filter->operation()) {
+                case FilterItem::NotSetOperation:
+                case FilterItem::Equals:
+                case FilterItem::NotEquals:
+                case FilterItem::StartsWith:
+                case FilterItem::EndsWith:
+                case FilterItem::Contains:
+                    break;
+                default:
+                    filter->setOperation(FilterItem::NotSetOperation);
+                    break;
+                }
+            default:
+                break;
+            }
+
             filter->setProperty(static_cast<FilterItem::Properties>(value.toInt()));
             break;
+        }
         case OperationColumn:
             filter->setOperation(static_cast<FilterItem::Operation>(value.toInt()));
             break;
@@ -337,7 +385,7 @@ bool FiltersModel::setData(const QModelIndex &index, const QVariant &value, int 
     }
     }
 
-    emit dataChanged(this->index(index.row(), 0, index.parent()), this->index(index.row(), rowCount() - 1, index.parent()));
+    emit dataChanged(this->index(index.row(), 0, index.parent()), this->index(index.row(), columnCount() - 1, index.parent()));
 
     return true;
 }

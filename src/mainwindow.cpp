@@ -52,6 +52,12 @@ MainWindow::MainWindow(QWidget *parent) :
             ui->filtersWidget, &FiltersWidget::find);
     connect(ui->actionClear, &QAction::triggered,
             ui->filtersWidget, &FiltersWidget::clearWithWarning);
+    connect(ui->actionCollapseAll, &QAction::triggered,
+            ui->filtersWidget, &FiltersWidget::collapseAll);
+    connect(ui->actionExpandAll, &QAction::triggered,
+            ui->filtersWidget, &FiltersWidget::expandAll);
+
+
     connect(ui->actionOpen, &QAction::triggered,
             this, &MainWindow::openFilters);
     connect(ui->actionSave, &QAction::triggered,
@@ -121,7 +127,7 @@ void MainWindow::openFilters()
 {
     QSettings settins;
     QString openDir = settins.value("lastOpenFiltersDir").toString();
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open filtes"), openDir, "JSON Filters (*.json)");
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open filtes"), openDir, tr("JSON Filters (*.json)"));
     QFileInfo fileInfo (fileName);
     settins.setValue("lastOpenFiltersDir", fileInfo.path());
 

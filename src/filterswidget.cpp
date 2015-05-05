@@ -46,23 +46,8 @@ void FiltersWidget::find() const
             return;
     }
 
-    IqOrmFilter *archiveFromFilter = new IqOrmFilter();
-    archiveFromFilter->setProperty("dateTime");
-    archiveFromFilter->setCondition(IqOrmFilter::GreaterOrEquals);
-    archiveFromFilter->setValue(ui->archiveFromDateTimeEdit->dateTime());
-
-    IqOrmFilter *archiveToFilter = new IqOrmFilter();
-    archiveToFilter->setProperty("dateTime");
-    archiveToFilter->setCondition(IqOrmFilter::LessOrEquals);
-    archiveToFilter->setValue(ui->archiveToDateTimeEdit->dateTime());
-
-    IqOrmAndGroupFilter *groupFilter = new IqOrmAndGroupFilter();
-    groupFilter->add(archiveFromFilter);
-    groupFilter->add(archiveToFilter);
-    groupFilter->add(rootFilter);
-
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-    m_findModel->setFilters(groupFilter);
+    m_findModel->setFilters(rootFilter);
     m_findModel->load();
     QApplication::restoreOverrideCursor();
 }
@@ -117,7 +102,7 @@ bool FiltersWidget::load(const QString &fileName) const
     QJsonDocument jsonDoc;
     jsonDoc = QJsonDocument::fromJson(file.readAll(), &parseError);
     if (jsonDoc.isNull()) {
-        qWarning() << tr("Error on load json from \"0\". Error: %1.")
+        qWarning() << tr("Error on load json from \"%0\". Error: %1.")
                       .arg(fileName)
                       .arg(parseError.errorString());
         return false;
@@ -134,6 +119,8 @@ bool FiltersWidget::load(const QString &fileName) const
         return true;
 
     createItemFromJson(rootObject, m_filtersModel->invisibleRootItemIndex(0));
+
+    expandAll();
 
     return true;
 }
@@ -350,7 +337,7 @@ QJsonObject FiltersWidget::createFilterJson(const FilterItem *filterItem) const
         else if (filterItem->value().canConvert<QString>())
             resultObject.insert("value", filterItem->value().toString());
         else
-            qWarning() << tr("Error to save filter value to Json");
+            qWarning() << tr("Error to save filter value to Json.");
 
         resultObject.insert("caseSensitivity", filterItem->caseSensitivity() == Qt::CaseSensitive);
 
@@ -468,7 +455,7 @@ bool FiltersWidget::createItemFromJson(const QJsonObject &filterObject, const QM
         else if (value.isString())
             itemValue = value.toString();
         else {
-            qWarning() << tr("Unknown value");
+            qWarning() << tr("Unknown value.");
             return false;
         }
 
@@ -496,7 +483,7 @@ bool FiltersWidget::createItemFromJson(const QJsonObject &filterObject, const QM
         QJsonArray childsArray = filterObject.value("childs").toArray();
         foreach (const QJsonValue &childItemValue, childsArray) {
             if (!childItemValue.isObject()) {
-                qWarning() << tr("Child is not object");
+                qWarning() << tr("Child is not object.");
                 return false;
             }
             createItemFromJson(childItemValue.toObject(), typeIndex);
@@ -509,7 +496,7 @@ bool FiltersWidget::createItemFromJson(const QJsonObject &filterObject, const QM
         QJsonArray childsArray = filterObject.value("childs").toArray();
         foreach (const QJsonValue &childItemValue, childsArray) {
             if (!childItemValue.isObject()) {
-                qWarning() << tr("Child is not object");
+                qWarning() << tr("Child is not object.");
                 return false;
             }
             createItemFromJson(childItemValue.toObject(), typeIndex);
@@ -530,9 +517,6 @@ void FiltersWidget::loadSettings()
         }
     }
 
-    ui->archiveFromDateTimeEdit->setDateTime(settigs.value("archiveFromDateTime").toDateTime());
-    ui->archiveToDateTimeEdit->setDateTime(settigs.value("archiveToDateTime").toDateTime());
-
     settigs.endGroup();
 
     QString lastfilesFilePath = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/" + "lastfilters.json";
@@ -549,9 +533,6 @@ void FiltersWidget::saveSettings() const
     }
     settigs.setValue("filterTableColumnWidths", columnWidths);
 
-    settigs.setValue("archiveFromDateTime", ui->archiveFromDateTimeEdit->dateTime());
-    settigs.setValue("archiveToDateTime", ui->archiveToDateTimeEdit->dateTime());
-
     settigs.endGroup();
 
     QDir dir;
@@ -564,6 +545,16 @@ void FiltersWidget::saveSettings() const
         qWarning() << tr("Enable to create \"%0\" dir.")
                       .arg(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
     }
+}
+
+void FiltersWidget::collapseAll() const
+{
+    ui->filtersTreeView->collapseAll();
+}
+
+void FiltersWidget::expandAll() const
+{
+    ui->filtersTreeView->expandAll();
 }
 
 

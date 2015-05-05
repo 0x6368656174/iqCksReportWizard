@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include <QApplication>
+#include <QTranslator>
+#include <QLibraryInfo>
 #include "logdialog.h"
 
 void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
@@ -35,6 +37,19 @@ int main(int argc, char *argv[])
     QApplication::setApplicationVersion("1.0.0");
 
     QApplication a(argc, argv);
+
+    QTranslator ruTranslator;
+    ruTranslator.load("://iqCksReportWizard_ru");
+    a.installTranslator(&ruTranslator);
+
+    QTranslator qtRuTranslator;
+    qtRuTranslator.load("qt_ru", QLibraryInfo::location (QLibraryInfo::TranslationsPath));
+    a.installTranslator(&qtRuTranslator);
+
+    QTranslator qtBaseRuTranslator;
+    qtBaseRuTranslator.load("qtbase_ru", QLibraryInfo::location (QLibraryInfo::TranslationsPath));
+    a.installTranslator(&qtBaseRuTranslator);
+
     MainWindow w;
     w.show();
 

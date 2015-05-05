@@ -1,5 +1,7 @@
 #include "filteritemdelegate.h"
 #include <QComboBox>
+#include <QDateTimeEdit>
+#include <QSpinBox>
 #include <QPointer>
 #include <QStyleOptionComboBox>
 #include <QApplication>
@@ -21,11 +23,34 @@ FilterItemDelegate::FilterItemDelegate(QObject *parent) :
     m_operationStrings[FilterItem::NotEquals] = tr("not equals");
     m_operationStrings[FilterItem::StartsWith] = tr("start with");
     m_operationStrings[FilterItem::EndsWith] = tr("end with");
-    m_operationStrings[FilterItem::Contains] = tr("contain");
+    m_operationStrings[FilterItem::Contains] = tr("contains");
     m_operationStrings[FilterItem::Greater] = tr("greater");
     m_operationStrings[FilterItem::GreaterOrEquals] = tr("greater or equals");
     m_operationStrings[FilterItem::Less] = tr("less");
     m_operationStrings[FilterItem::LessOrEquals] = tr("less or equals");
+
+    m_dateTimeOperationStrings[FilterItem::NotSetOperation] = m_operationStrings[FilterItem::NotSetOperation];
+    m_dateTimeOperationStrings[FilterItem::Equals] = m_operationStrings[FilterItem::Equals];
+    m_dateTimeOperationStrings[FilterItem::NotEquals] = m_operationStrings[FilterItem::NotEquals];
+    m_dateTimeOperationStrings[FilterItem::Greater] = m_operationStrings[FilterItem::Greater];
+    m_dateTimeOperationStrings[FilterItem::GreaterOrEquals] = m_operationStrings[FilterItem::GreaterOrEquals];
+    m_dateTimeOperationStrings[FilterItem::Less] = m_operationStrings[FilterItem::Less];
+    m_dateTimeOperationStrings[FilterItem::LessOrEquals] = m_operationStrings[FilterItem::LessOrEquals];
+
+    m_intOperationStrings[FilterItem::NotSetOperation] = m_operationStrings[FilterItem::NotSetOperation];
+    m_intOperationStrings[FilterItem::Equals] = m_operationStrings[FilterItem::Equals];
+    m_intOperationStrings[FilterItem::NotEquals] = m_operationStrings[FilterItem::NotEquals];
+    m_intOperationStrings[FilterItem::Greater] = m_operationStrings[FilterItem::Greater];
+    m_intOperationStrings[FilterItem::GreaterOrEquals] = m_operationStrings[FilterItem::GreaterOrEquals];
+    m_intOperationStrings[FilterItem::Less] = m_operationStrings[FilterItem::Less];
+    m_intOperationStrings[FilterItem::LessOrEquals] = m_operationStrings[FilterItem::LessOrEquals];
+
+    m_stringOperationStrings[FilterItem::NotSetOperation] = m_operationStrings[FilterItem::NotSetOperation];
+    m_stringOperationStrings[FilterItem::Equals] = m_operationStrings[FilterItem::Equals];
+    m_stringOperationStrings[FilterItem::NotEquals] = m_operationStrings[FilterItem::NotEquals];
+    m_stringOperationStrings[FilterItem::StartsWith] = m_operationStrings[FilterItem::StartsWith];
+    m_stringOperationStrings[FilterItem::EndsWith] = m_operationStrings[FilterItem::EndsWith];
+    m_stringOperationStrings[FilterItem::Contains] = m_operationStrings[FilterItem::Contains];
 
     m_propertyStrings[FilterItem::NotSetPorperty] = tr("Not set");
     m_propertyStrings[FilterItem::DateTime] = tr("Date time of archivate");
@@ -67,11 +92,54 @@ QWidget *FilterItemDelegate::createEditor(QWidget *parent, const QStyleOptionVie
         break;
     }
     case FiltersModel::OperationColumn : {
-        return createComboBox(m_operationStrings);
+        FilterItem *item = static_cast<FilterItem *>(index.internalPointer());
+        Q_CHECK_PTR(item);
+
+        switch (item->propertyType()) {
+        case QMetaType::QDateTime: {
+            return createComboBox(m_dateTimeOperationStrings);
+            break;
+        }
+        case QMetaType::Int: {
+            return createComboBox(m_intOperationStrings);
+            break;
+        }
+        case QMetaType::QString: {
+            return createComboBox(m_stringOperationStrings);
+            break;
+        }
+        default:
+            return createComboBox(m_operationStrings);
+            break;
+        }
         break;
     }
     case FiltersModel::PropertyColumn : {
         return createComboBox(m_propertyStrings);
+        break;
+    }
+    case FiltersModel::ValueColumn: {
+        FilterItem *item = static_cast<FilterItem *>(index.internalPointer());
+        Q_CHECK_PTR(item);
+
+        switch (item->propertyType()) {
+        case QMetaType::QDateTime: {
+            QDateTimeEdit *dateTimeEdit = new QDateTimeEdit(parent);
+            dateTimeEdit->setDisplayFormat("dd.MM.yyyy hh:mm");
+            dateTimeEdit->setCalendarPopup(true);
+            return dateTimeEdit;
+            break;
+        }
+        case QMetaType::Int: {
+            QSpinBox *spinBox = new QSpinBox(parent);
+            spinBox->setMaximum(9999999);
+            return spinBox;
+            break;
+        }
+        default:
+            return QStyledItemDelegate::createEditor(parent, option, index);
+            break;
+        }
         break;
     }
     default:
@@ -110,6 +178,20 @@ void FilterItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptio
     case FiltersModel::PropertyColumn: {
         editor->setGeometry(option.rect);
         break;
+    }
+    case FiltersModel::ValueColumn: {
+        FilterItem *item = static_cast<FilterItem *>(index.internalPointer());
+        Q_CHECK_PTR(item);
+        switch (item->propertyType()) {
+        case QMetaType::QDateTime:
+        case QMetaType::Int: {
+            editor->setGeometry(option.rect);
+            break;
+        }
+        default:
+            QStyledItemDelegate::updateEditorGeometry(editor, option, index);
+            break;
+        }
     }
     default:
         QStyledItemDelegate::updateEditorGeometry(editor, option, index);
@@ -201,9 +283,9 @@ void FilterItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
     };
 
     FilterItem::Type groupType = static_cast<FilterItem::Type>(index.model()->data(index.model()->index(index.row(),
-                                                                                                                  FiltersModel::TypeColumn,
-                                                                                                                  index.parent()),
-                                                                                             Qt::EditRole).toInt());
+                                                                                                        FiltersModel::TypeColumn,
+                                                                                                        index.parent()),
+                                                                                   Qt::EditRole).toInt());
     switch (index.column()) {
     case FiltersModel::TypeColumn:
         paintComboBox(m_groupsStrings);
@@ -221,8 +303,27 @@ void FilterItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
         else
             QStyledItemDelegate::paint(painter, option, index);
         break;
-    case FiltersModel::CaseSensitivityColumn:
-        if (groupType == FilterItem::Condition)
+    case FiltersModel::ValueColumn: {
+        FilterItem *item = static_cast<FilterItem *>(index.internalPointer());
+        Q_CHECK_PTR(item);
+        switch (item->propertyType()) {
+        case QMetaType::QDateTime: {
+            QStyleOptionViewItem valueOption (option);
+            valueOption.text = index.model()->data(index).toDateTime().toString("dd.MM.yyyy hh:mm");
+            QStyledItemDelegate::paint(painter, valueOption, QModelIndex());
+            break;
+        }
+        default:
+            QStyledItemDelegate::paint(painter, option, index);
+            break;
+        }
+        break;
+    }
+    case FiltersModel::CaseSensitivityColumn: {
+        FilterItem *item = static_cast<FilterItem *>(index.internalPointer());
+        Q_CHECK_PTR(item);
+        if (groupType == FilterItem::Condition
+                && item->propertyType() == QMetaType::QString)
             QStyledItemDelegate::paint(painter, option, index);
         else {
             QStyleOptionViewItem notCheckOption (option);
@@ -230,6 +331,7 @@ void FilterItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
             QStyledItemDelegate::paint(painter, notCheckOption, QModelIndex());
         }
         break;
+    }
     default:
         QStyledItemDelegate::paint(painter, option, index);
         break;

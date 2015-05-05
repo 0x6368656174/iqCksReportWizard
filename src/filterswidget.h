@@ -33,6 +33,9 @@ public:
     void loadSettings();
     void saveSettings() const;
 
+    void collapseAll() const;
+    void expandAll() const;
+
 private:
     void clear(bool warningDialogEnable) const;
     IqOrmAbstractFilter *createFilter(const FilterItem *filterItem) const;

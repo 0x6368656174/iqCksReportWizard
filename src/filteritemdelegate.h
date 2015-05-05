@@ -8,6 +8,7 @@
 
 class FilterItemDelegate : public QStyledItemDelegate
 {
+    Q_OBJECT
 public:
     FilterItemDelegate(QObject * parent = Q_NULLPTR);
     ~FilterItemDelegate();
@@ -24,6 +25,9 @@ public:
 private:
     QMap<int, QString> m_groupsStrings;
     QMap<int, QString> m_operationStrings;
+    QMap<int, QString> m_dateTimeOperationStrings;
+    QMap<int, QString> m_intOperationStrings;
+    QMap<int, QString> m_stringOperationStrings;
     QMap<int, QString> m_propertyStrings;
     QMainWindow *m_mainWindow;
 };
