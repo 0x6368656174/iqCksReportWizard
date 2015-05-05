@@ -216,10 +216,18 @@ void FilterItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
         }
         break;
     case FiltersModel::PropertyColumn:
-        if (groupType == FilterItem::Condition) {
+        if (groupType == FilterItem::Condition)
             paintComboBox(m_propertyStrings);
-        } else {
+        else
             QStyledItemDelegate::paint(painter, option, index);
+        break;
+    case FiltersModel::CaseSensitivityColumn:
+        if (groupType == FilterItem::Condition)
+            QStyledItemDelegate::paint(painter, option, index);
+        else {
+            QStyleOptionViewItem notCheckOption (option);
+            notCheckOption.features = QStyleOptionViewItem::None;
+            QStyledItemDelegate::paint(painter, notCheckOption, QModelIndex());
         }
         break;
     default:

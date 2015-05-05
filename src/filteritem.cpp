@@ -5,7 +5,8 @@ FilterItem::FilterItem(FilterItem *parent):
     m_type(NotSetType),
     m_property(NotSetPorperty),
     m_operation(NotSetOperation),
-    m_value(QVariant())
+    m_value(QVariant()),
+    m_caseSensitivity(Qt::CaseInsensitive)
 {
 }
 
@@ -141,3 +142,14 @@ void FilterItem::setValue(const QVariant &value)
 {
     m_value = value;
 }
+
+Qt::CaseSensitivity FilterItem::caseSensitivity() const
+{
+    return m_caseSensitivity;
+}
+
+void FilterItem::setCaseSensitivity(const Qt::CaseSensitivity &caseSensitivity)
+{
+    m_caseSensitivity = caseSensitivity;
+}
+

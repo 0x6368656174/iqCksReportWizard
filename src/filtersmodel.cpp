@@ -20,71 +20,94 @@ QVariant FiltersModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    if (role != Qt::DisplayRole && role != Qt::EditRole)
+
+    if (role != Qt::DisplayRole
+            && role != Qt::EditRole
+            && role != Qt::CheckStateRole)
         return QVariant();
 
     FilterItem *filter = static_cast<FilterItem *>(index.internalPointer());
 
-    switch (index.column()) {
-    case TypeColumn: {
-        return filter->type();
+    switch (role) {
+    case Qt::CheckStateRole: {
+        if (index.column() == CaseSensitivityColumn) {
+            if (filter->caseSensitivity() == Qt::CaseSensitive)
+                return Qt::Checked;
+            else
+                return Qt::Unchecked;
+        }
+        else
+            return QVariant();
         break;
     }
+    case Qt::DisplayRole:
+    case Qt::EditRole: {
+        switch (index.column()) {
+        case TypeColumn: {
+            return filter->type();
+            break;
+        }
 
-    case PropertyColumn: {
-        switch (filter->type()) {
-        case FilterItem::NotSetType:
-            return QVariant();
+        case PropertyColumn: {
+            switch (filter->type()) {
+            case FilterItem::NotSetType:
+                return QVariant();
+                break;
+            case FilterItem::Condition:
+                return filter->property();
+                break;
+            case FilterItem::OrGroup:
+                return QVariant();
+                break;
+            case FilterItem::AndGroup:
+                return QVariant();
+                break;
+            }
             break;
-        case FilterItem::Condition:
-            return filter->property();
+        }
+
+        case OperationColumn: {
+            switch (filter->type()) {
+            case FilterItem::NotSetType:
+                return QVariant();
+                break;
+            case FilterItem::Condition:
+                return filter->operation();
+                break;
+            case FilterItem::OrGroup:
+                return QVariant();
+                break;
+            case FilterItem::AndGroup:
+                return QVariant();
+                break;
+            }
             break;
-        case FilterItem::OrGroup:
-            return QVariant();
+        }
+        case ValueColumn: {
+            switch (filter->type()) {
+            case FilterItem::NotSetType:
+                return QVariant();
+                break;
+            case FilterItem::Condition:
+                return filter->value();
+                break;
+            case FilterItem::OrGroup:
+                return QVariant();
+                break;
+            case FilterItem::AndGroup:
+                return QVariant();
+                break;
+            }
             break;
-        case FilterItem::AndGroup:
+        }
+        case CaseSensitivityColumn: {
             return QVariant();
             break;
         }
-        break;
-    }
-
-    case OperationColumn: {
-        switch (filter->type()) {
-        case FilterItem::NotSetType:
-            return QVariant();
-            break;
-        case FilterItem::Condition:
-            return filter->operation();
-            break;
-        case FilterItem::OrGroup:
-            return QVariant();
-            break;
-        case FilterItem::AndGroup:
-            return QVariant();
-            break;
-        }
-        break;
-    }
-    case ValueColumn: {
-        switch (filter->type()) {
-        case FilterItem::NotSetType:
-            return QVariant();
-            break;
-        case FilterItem::Condition:
-            return filter->value();
-            break;
-        case FilterItem::OrGroup:
-            return QVariant();
-            break;
-        case FilterItem::AndGroup:
-            return QVariant();
-            break;
         }
         break;
     }
     }
-
 
     return QVariant();
 }
@@ -99,6 +122,13 @@ Qt::ItemFlags FiltersModel::flags(const QModelIndex &index) const
     switch (index.column()) {
     case TypeColumn:
         return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
+        break;
+    case CaseSensitivityColumn:
+        if (filter->type() == FilterItem::Condition) {
+            return QAbstractItemModel::flags(index) | Qt::ItemIsUserCheckable;
+        } else {
+            return QAbstractItemModel::flags(index);
+        }
         break;
     default:
         if (filter->type() == FilterItem::Condition) {
@@ -127,6 +157,9 @@ QVariant FiltersModel::headerData(int section, Qt::Orientation orientation, int 
             break;
         case ValueColumn:
             return tr("Value");
+            break;
+        case CaseSensitivityColumn:
+            return tr("Case Sensitive");
             break;
         }
     }
@@ -184,7 +217,7 @@ int FiltersModel::rowCount(const QModelIndex &parent) const
 int FiltersModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return 4;
+    return 5;
 }
 
 FilterItem *FiltersModel::rootFilter() const
@@ -218,75 +251,90 @@ bool FiltersModel::setData(const QModelIndex &index, const QVariant &value, int 
     if (!index.isValid())
         return false;
 
-    if (role != Qt::EditRole)
+    if (role != Qt::EditRole
+            && role != Qt::CheckStateRole)
         return false;
 
     FilterItem *filter = static_cast<FilterItem *>(index.internalPointer());
     Q_CHECK_PTR(filter);
 
-    if (index.column() == TypeColumn) {
-        switch (value.toInt()) {
-        case FilterItem::NotSetType:
-        case FilterItem::Condition:
-            if (filter->childCount() > 0) {
-                beginRemoveRows(index, 0, filter->childCount() - 1);
-                filter->setChildFilters(QList<FilterItem *>());
-                endRemoveRows();
-            }
-            break;
-        default:
-            break;
-        }
-    }
-
-    FilterItem::Type oldGroupType = filter->type();
-
-    switch (index.column()) {
-    case TypeColumn:
-        filter->setType(static_cast<FilterItem::Type>(value.toInt()));
-        break;
-    case PropertyColumn:
-        filter->setProperty(static_cast<FilterItem::Properties>(value.toInt()));
-        break;
-    case OperationColumn:
-        filter->setOperation(static_cast<FilterItem::Operation>(value.toInt()));
-        break;
-    case ValueColumn:
-        filter->setValue(value.toString());
+    switch (role) {
+    case Qt::CheckStateRole: {
+        if (index.column() == CaseSensitivityColumn)
+            filter->setCaseSensitivity(value == Qt::Checked?Qt::CaseSensitive:Qt::CaseInsensitive);
+        else
+            return false;
         break;
     }
-
-    if (index.column() == TypeColumn) {
-        switch (value.toInt()) {
-        case FilterItem::AndGroup:
-        case FilterItem::OrGroup:
-            if (oldGroupType == FilterItem::NotSetType
-                    || oldGroupType == FilterItem::Condition) {
-                beginInsertRows(index, 0, 0);
-                filter->addChildFilter(new FilterItem(filter));
-                endInsertRows();
-            }
-        default:
-            break;
-        }
-    }
-
-    //Приведем в порядок NotSet фильтры
-    FilterItem *parentFilter = filter->parentFilter();
-    if (parentFilter) {
-        QModelIndex parentIndex = indexForFilter(parentFilter);
-        if (parentIndex.isValid()) {
-            for (int i = parentFilter->childCount() - 1; i > -1; i--) {
-                if (parentFilter->child(i)->type() == FilterItem::NotSetType) {
-                    beginRemoveRows(parentIndex, i, i);
-                    parentFilter->removeChildFilterAt(i);
+    case Qt::EditRole : {
+        if (index.column() == TypeColumn) {
+            switch (value.toInt()) {
+            case FilterItem::NotSetType:
+            case FilterItem::Condition:
+                if (filter->childCount() > 0) {
+                    beginRemoveRows(index, 0, filter->childCount() - 1);
+                    filter->setChildFilters(QList<FilterItem *>());
                     endRemoveRows();
                 }
+                break;
+            default:
+                break;
             }
-            beginInsertRows(parentIndex, parentFilter->childCount(), parentFilter->childCount());
-            parentFilter->addChildFilter(new FilterItem(parentFilter));
-            endInsertRows();
         }
+
+        FilterItem::Type oldGroupType = filter->type();
+
+        switch (index.column()) {
+        case TypeColumn:
+            filter->setType(static_cast<FilterItem::Type>(value.toInt()));
+            break;
+        case PropertyColumn:
+            filter->setProperty(static_cast<FilterItem::Properties>(value.toInt()));
+            break;
+        case OperationColumn:
+            filter->setOperation(static_cast<FilterItem::Operation>(value.toInt()));
+            break;
+        case ValueColumn:
+            filter->setValue(value.toString());
+            break;
+        case CaseSensitivityColumn:
+            break;
+        }
+
+        if (index.column() == TypeColumn) {
+            switch (value.toInt()) {
+            case FilterItem::AndGroup:
+            case FilterItem::OrGroup:
+                if (oldGroupType == FilterItem::NotSetType
+                        || oldGroupType == FilterItem::Condition) {
+                    beginInsertRows(index, 0, 0);
+                    filter->addChildFilter(new FilterItem(filter));
+                    endInsertRows();
+                }
+            default:
+                break;
+            }
+        }
+
+        //Приведем в порядок NotSet фильтры
+        FilterItem *parentFilter = filter->parentFilter();
+        if (parentFilter) {
+            QModelIndex parentIndex = indexForFilter(parentFilter);
+            if (parentIndex.isValid()) {
+                for (int i = parentFilter->childCount() - 1; i > -1; i--) {
+                    if (parentFilter->child(i)->type() == FilterItem::NotSetType) {
+                        beginRemoveRows(parentIndex, i, i);
+                        parentFilter->removeChildFilterAt(i);
+                        endRemoveRows();
+                    }
+                }
+                beginInsertRows(parentIndex, parentFilter->childCount(), parentFilter->childCount());
+                parentFilter->addChildFilter(new FilterItem(parentFilter));
+                endInsertRows();
+            }
+        }
+        break;
+    }
     }
 
     emit dataChanged(this->index(index.row(), 0, index.parent()), this->index(index.row(), rowCount() - 1, index.parent()));

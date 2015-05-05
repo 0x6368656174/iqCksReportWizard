@@ -48,12 +48,12 @@ void FiltersWidget::find() const
 
     IqOrmFilter *archiveFromFilter = new IqOrmFilter();
     archiveFromFilter->setProperty("dateTime");
-    archiveFromFilter->setOperation(IqOrmFilter::GreaterOrEquals);
+    archiveFromFilter->setCondition(IqOrmFilter::GreaterOrEquals);
     archiveFromFilter->setValue(ui->archiveFromDateTimeEdit->dateTime());
 
     IqOrmFilter *archiveToFilter = new IqOrmFilter();
     archiveToFilter->setProperty("dateTime");
-    archiveToFilter->setOperation(IqOrmFilter::LessOrEquals);
+    archiveToFilter->setCondition(IqOrmFilter::LessOrEquals);
     archiveToFilter->setValue(ui->archiveToDateTimeEdit->dateTime());
 
     IqOrmAndGroupFilter *groupFilter = new IqOrmAndGroupFilter();
@@ -190,35 +190,36 @@ IqOrmAbstractFilter *FiltersWidget::createFilter(const FilterItem *filterItem) c
         case FilterItem::NotSetOperation:
             break;
         case FilterItem::Equals:
-            resultFilter->setOperation(IqOrmFilter::Equals);
+            resultFilter->setCondition(IqOrmFilter::Equals);
             break;
         case FilterItem::NotEquals:
-            resultFilter->setOperation(IqOrmFilter::NotEquals);
+            resultFilter->setCondition(IqOrmFilter::NotEquals);
             break;
         case FilterItem::StartsWith:
-            resultFilter->setOperation(IqOrmFilter::StartsWith);
+            resultFilter->setCondition(IqOrmFilter::StartsWith);
             break;
         case FilterItem::EndsWith:
-            resultFilter->setOperation(IqOrmFilter::EndsWith);
+            resultFilter->setCondition(IqOrmFilter::EndsWith);
             break;
         case FilterItem::Contains:
-            resultFilter->setOperation(IqOrmFilter::Contains);
+            resultFilter->setCondition(IqOrmFilter::Contains);
             break;
         case FilterItem::Greater:
-            resultFilter->setOperation(IqOrmFilter::GreaterThan);
+            resultFilter->setCondition(IqOrmFilter::GreaterThan);
             break;
         case FilterItem::GreaterOrEquals:
-            resultFilter->setOperation(IqOrmFilter::GreaterOrEquals);
+            resultFilter->setCondition(IqOrmFilter::GreaterOrEquals);
             break;
         case FilterItem::Less:
-            resultFilter->setOperation(IqOrmFilter::LessThan);
+            resultFilter->setCondition(IqOrmFilter::LessThan);
             break;
         case FilterItem::LessOrEquals:
-            resultFilter->setOperation(IqOrmFilter::LessOrEquals);
+            resultFilter->setCondition(IqOrmFilter::LessOrEquals);
             break;
         }
 
         resultFilter->setValue(filterItem->value());
+        resultFilter->setCaseSensitivity(filterItem->caseSensitivity());
         filter = resultFilter;
         break;
     }
@@ -231,7 +232,10 @@ IqOrmAbstractFilter *FiltersWidget::createFilter(const FilterItem *filterItem) c
                 resultFilter->add(childResultFilter);
         }
 
-        filter = resultFilter;
+        if (resultFilter->count() == 0)
+            resultFilter->deleteLater();
+        else
+            filter = resultFilter;
         break;
     }
     case FilterItem::OrGroup: {
@@ -243,7 +247,10 @@ IqOrmAbstractFilter *FiltersWidget::createFilter(const FilterItem *filterItem) c
                 resultFilter->add(childResultFilter);
         }
 
-        filter = resultFilter;
+        if (resultFilter->count() == 0)
+            resultFilter->deleteLater();
+        else
+            filter = resultFilter;
         break;
     }
     }
@@ -344,6 +351,9 @@ QJsonObject FiltersWidget::createFilterJson(const FilterItem *filterItem) const
             resultObject.insert("value", filterItem->value().toString());
         else
             qWarning() << tr("Error to save filter value to Json");
+
+        resultObject.insert("caseSensitivity", filterItem->caseSensitivity() == Qt::CaseSensitive);
+
         return resultObject;
 
         break;
@@ -462,6 +472,8 @@ bool FiltersWidget::createItemFromJson(const QJsonObject &filterObject, const QM
             return false;
         }
 
+        Qt::CheckState caseSensitivityValue = filterObject.value("caseSensitivity").toBool()?Qt::Checked:Qt::Unchecked;
+
 
         QModelIndex typeIndex = m_filtersModel->index(row, FiltersModel::TypeColumn, parentIndex);
         m_filtersModel->setData(typeIndex, FilterItem::Condition, Qt::EditRole);
@@ -474,6 +486,9 @@ bool FiltersWidget::createItemFromJson(const QJsonObject &filterObject, const QM
 
         QModelIndex valueIndex = m_filtersModel->index(row, FiltersModel::ValueColumn, parentIndex);
         m_filtersModel->setData(valueIndex, itemValue, Qt::EditRole);
+
+        QModelIndex caseSensitivityIndex = m_filtersModel->index(row, FiltersModel::CaseSensitivityColumn, parentIndex);
+        m_filtersModel->setData(caseSensitivityIndex, caseSensitivityValue, Qt::CheckStateRole);
     } else if (itemType.compare("and", Qt::CaseInsensitive) == 0) {
         QModelIndex typeIndex = m_filtersModel->index(row, FiltersModel::TypeColumn, parentIndex);
         m_filtersModel->setData(typeIndex, FilterItem::AndGroup, Qt::EditRole);

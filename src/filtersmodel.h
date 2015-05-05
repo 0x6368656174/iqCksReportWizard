@@ -12,7 +12,8 @@ public:
         TypeColumn,
         PropertyColumn,
         OperationColumn,
-        ValueColumn
+        ValueColumn,
+        CaseSensitivityColumn
     };
 
     explicit FiltersModel(QObject *parent = 0);

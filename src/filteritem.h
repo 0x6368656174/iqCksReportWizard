@@ -78,6 +78,9 @@ public:
     QVariant value() const;
     void setValue(const QVariant &value);
 
+    Qt::CaseSensitivity caseSensitivity() const;
+    void setCaseSensitivity(const Qt::CaseSensitivity &caseSensitivity);
+
 private:
     FilterItem *m_parentFilter;
     QList<FilterItem *> m_childFilters;
@@ -85,6 +88,7 @@ private:
     Properties m_property;
     Operation m_operation;
     QVariant m_value;
+    Qt::CaseSensitivity m_caseSensitivity;
 };
 
 #endif // FILTERITEM_H
