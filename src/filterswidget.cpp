@@ -404,7 +404,7 @@ bool FiltersWidget::createItemFromJson(const QJsonObject &filterObject, const QM
             itemProperty = FilterItem::AdditionalInfo;
         else if (property.compare("ks", Qt::CaseInsensitive) == 0)
             itemProperty = FilterItem::KS;
-        else if (property.compare("address", Qt::CaseInsensitive) == 0)
+        else if (property.compare("addresses", Qt::CaseInsensitive) == 0)
             itemProperty = FilterItem::Address;
         else if (property.compare("sender", Qt::CaseInsensitive) == 0)
             itemProperty = FilterItem::Sender;
