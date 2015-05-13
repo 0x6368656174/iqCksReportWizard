@@ -20,7 +20,6 @@ FilterItemDelegate::FilterItemDelegate(QObject *parent) :
 
     m_operationStrings[FilterItem::NotSetOperation] = tr("not set");
     m_operationStrings[FilterItem::Equals] = tr("equals");
-    m_operationStrings[FilterItem::NotEquals] = tr("not equals");
     m_operationStrings[FilterItem::StartsWith] = tr("start with");
     m_operationStrings[FilterItem::EndsWith] = tr("end with");
     m_operationStrings[FilterItem::Contains] = tr("contains");
@@ -31,7 +30,6 @@ FilterItemDelegate::FilterItemDelegate(QObject *parent) :
 
     m_dateTimeOperationStrings[FilterItem::NotSetOperation] = m_operationStrings[FilterItem::NotSetOperation];
     m_dateTimeOperationStrings[FilterItem::Equals] = m_operationStrings[FilterItem::Equals];
-    m_dateTimeOperationStrings[FilterItem::NotEquals] = m_operationStrings[FilterItem::NotEquals];
     m_dateTimeOperationStrings[FilterItem::Greater] = m_operationStrings[FilterItem::Greater];
     m_dateTimeOperationStrings[FilterItem::GreaterOrEquals] = m_operationStrings[FilterItem::GreaterOrEquals];
     m_dateTimeOperationStrings[FilterItem::Less] = m_operationStrings[FilterItem::Less];
@@ -39,7 +37,6 @@ FilterItemDelegate::FilterItemDelegate(QObject *parent) :
 
     m_intOperationStrings[FilterItem::NotSetOperation] = m_operationStrings[FilterItem::NotSetOperation];
     m_intOperationStrings[FilterItem::Equals] = m_operationStrings[FilterItem::Equals];
-    m_intOperationStrings[FilterItem::NotEquals] = m_operationStrings[FilterItem::NotEquals];
     m_intOperationStrings[FilterItem::Greater] = m_operationStrings[FilterItem::Greater];
     m_intOperationStrings[FilterItem::GreaterOrEquals] = m_operationStrings[FilterItem::GreaterOrEquals];
     m_intOperationStrings[FilterItem::Less] = m_operationStrings[FilterItem::Less];
@@ -47,21 +44,33 @@ FilterItemDelegate::FilterItemDelegate(QObject *parent) :
 
     m_stringOperationStrings[FilterItem::NotSetOperation] = m_operationStrings[FilterItem::NotSetOperation];
     m_stringOperationStrings[FilterItem::Equals] = m_operationStrings[FilterItem::Equals];
-    m_stringOperationStrings[FilterItem::NotEquals] = m_operationStrings[FilterItem::NotEquals];
     m_stringOperationStrings[FilterItem::StartsWith] = m_operationStrings[FilterItem::StartsWith];
     m_stringOperationStrings[FilterItem::EndsWith] = m_operationStrings[FilterItem::EndsWith];
     m_stringOperationStrings[FilterItem::Contains] = m_operationStrings[FilterItem::Contains];
 
+    m_boolOperationStrings[FilterItem::NotSetOperation] = m_operationStrings[FilterItem::NotSetOperation];
+    m_boolOperationStrings[FilterItem::Equals] = m_operationStrings[FilterItem::Equals];
+
     m_propertyStrings[FilterItem::NotSetPorperty] = tr("Not set");
+    m_propertyStrings[FilterItem::ChannelName] = tr("Channel");
+    m_propertyStrings[FilterItem::ChannelNumber] = tr("Number");
+    m_propertyStrings[FilterItem::HeaderInfo] = tr("Additional info");
+    m_propertyStrings[FilterItem::Priority] = tr("Priopity");
+    //TODO временно не работают из-за того, что в таблице используются массивы
+//    m_propertyStrings[FilterItem::Addresses] = tr("Address");
+//    m_propertyStrings[FilterItem::Cc] = tr("Cc");
+    m_propertyStrings[FilterItem::SenderTime] = tr("Sender time");
+    m_propertyStrings[FilterItem::Sender] = tr("Sender");
+    m_propertyStrings[FilterItem::SenderInfo] = tr("Sender Info");
+    m_propertyStrings[FilterItem::Text] = tr("Text");
     m_propertyStrings[FilterItem::DateTime] = tr("Date time of archivate");
     m_propertyStrings[FilterItem::Direction] = tr("Direction");
-    m_propertyStrings[FilterItem::Channel] = tr("Channel");
-    m_propertyStrings[FilterItem::Number] = tr("Number");
-    m_propertyStrings[FilterItem::AdditionalInfo] = tr("Additional info");
-    m_propertyStrings[FilterItem::KS] = tr("KS");
-    m_propertyStrings[FilterItem::Address] = tr("Address");
-    m_propertyStrings[FilterItem::Sender] = tr("Sender");
-    m_propertyStrings[FilterItem::Text] = tr("Text");
+    m_propertyStrings[FilterItem::ChannelId] = tr("Channel ID");
+    m_propertyStrings[FilterItem::Journal] = tr("Journal");
+    m_propertyStrings[FilterItem::SerialNumber] = tr("Serial number");
+    m_propertyStrings[FilterItem::Svc] = tr("SVC");
+    m_propertyStrings[FilterItem::RouteId] = tr("Route ID");
+    m_propertyStrings[FilterItem::MessageType] = tr("Message Type");
 }
 
 FilterItemDelegate::~FilterItemDelegate()
@@ -70,12 +79,17 @@ FilterItemDelegate::~FilterItemDelegate()
 
 QWidget *FilterItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    auto createComboBox = [parent](const QMap<int, QString> &values){
+    auto createComboBox = [parent](const QMap<int, QString> &values, bool invert){
         QComboBox *comboBox = new QComboBox(parent);
         QMapIterator<int, QString> valuesI (values);
         while (valuesI.hasNext()) {
             valuesI.next();
-            comboBox->addItem(valuesI.value(), valuesI.key());
+            if (invert
+                    && valuesI.key() != FilterItem::NotSetOperation)
+                comboBox->addItem(tr("NOT %0")
+                                  .arg(valuesI.value()), valuesI.key());
+            else
+                comboBox->addItem(valuesI.value(), valuesI.key());
         }
         QTimer *timer = new QTimer (comboBox);
         QPointer<QComboBox> guarandComboBox (comboBox);
@@ -88,7 +102,7 @@ QWidget *FilterItemDelegate::createEditor(QWidget *parent, const QStyleOptionVie
 
     switch (index.column()) {
     case FiltersModel::TypeColumn: {
-        return createComboBox(m_groupsStrings);
+        return createComboBox(m_groupsStrings, false);
         break;
     }
     case FiltersModel::OperationColumn : {
@@ -97,25 +111,29 @@ QWidget *FilterItemDelegate::createEditor(QWidget *parent, const QStyleOptionVie
 
         switch (item->propertyType()) {
         case QMetaType::QDateTime: {
-            return createComboBox(m_dateTimeOperationStrings);
+            return createComboBox(m_dateTimeOperationStrings, item->inverted());
             break;
         }
         case QMetaType::Int: {
-            return createComboBox(m_intOperationStrings);
+            return createComboBox(m_intOperationStrings, item->inverted());
             break;
         }
         case QMetaType::QString: {
-            return createComboBox(m_stringOperationStrings);
+            return createComboBox(m_stringOperationStrings, item->inverted());
+            break;
+        }
+        case QMetaType::Bool: {
+            return createComboBox(m_boolOperationStrings, item->inverted());
             break;
         }
         default:
-            return createComboBox(m_operationStrings);
+            return createComboBox(m_operationStrings, item->inverted());
             break;
         }
         break;
     }
     case FiltersModel::PropertyColumn : {
-        return createComboBox(m_propertyStrings);
+        return createComboBox(m_propertyStrings, false);
         break;
     }
     case FiltersModel::ValueColumn: {
@@ -134,6 +152,13 @@ QWidget *FilterItemDelegate::createEditor(QWidget *parent, const QStyleOptionVie
             QSpinBox *spinBox = new QSpinBox(parent);
             spinBox->setMaximum(9999999);
             return spinBox;
+            break;
+        }
+        case QMetaType::Bool: {
+            QMap<int, QString> boolValues;
+            boolValues[false] = tr("FALSE");
+            boolValues[true] = tr("TRUE");
+            return createComboBox(boolValues, false);
             break;
         }
         default:
@@ -160,13 +185,34 @@ void FilterItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index
 
         QComboBox *comboBox = static_cast<QComboBox*>(editor);
         int valueRow = comboBox->findData(value);
-        Q_ASSERT(valueRow != -1);
         comboBox->setCurrentIndex(valueRow);
         break;
     }
-    default:
-        QStyledItemDelegate::setEditorData(editor, index);
-        break;
+    case FiltersModel::ValueColumn: {
+        QComboBox *comboBox = dynamic_cast<QComboBox *>(editor);
+        if (comboBox) {
+            FilterItem *item = static_cast<FilterItem *>(index.internalPointer());
+            Q_CHECK_PTR(item);
+            int valueRow = -1;
+            switch (item->propertyType()) {
+            case QMetaType::Bool: {
+                if (item->value().toBool())
+                    valueRow = 1;
+                else
+                    valueRow = 0;
+                break;
+            }
+            default:
+                int value = index.model()->data(index, Qt::EditRole).toInt();
+                valueRow = comboBox->findData(value);
+                break;
+            }
+            Q_ASSERT(valueRow != -1);
+            comboBox->setCurrentIndex(valueRow);
+            break;
+        } else
+            QStyledItemDelegate::setEditorData(editor, index);
+    }
     }
 }
 
@@ -247,10 +293,18 @@ void FilterItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model
 
 void FilterItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    auto paintComboBox = [painter, option, index, this](const QMap<int, QString> &values){
+    auto paintComboBox = [painter, option, index, this](const QMap<int, QString> &values, bool invert){
         int value = index.model()->data(index, Qt::DisplayRole).toInt();
-        Q_ASSERT(values.contains(value));
-        QString text = values[value];
+        QString text;
+        if(values.contains(value))
+            text = values[value];
+        else
+            text = values[0];
+
+        if (invert
+                && value != FilterItem::NotSetOperation)
+            text = tr("NOT %0")
+                    .arg(text);
 
         QStyleOptionViewItem textOption (option);
         QRect textRect = option.rect;
@@ -288,18 +342,19 @@ void FilterItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
                                                                                    Qt::EditRole).toInt());
     switch (index.column()) {
     case FiltersModel::TypeColumn:
-        paintComboBox(m_groupsStrings);
+        paintComboBox(m_groupsStrings, false);
         break;
     case FiltersModel::OperationColumn:
         if (groupType == FilterItem::Condition) {
-            paintComboBox(m_operationStrings);
+            FilterItem *item = static_cast<FilterItem *>(index.internalPointer());
+            paintComboBox(m_operationStrings, item->inverted());
         } else {
             QStyledItemDelegate::paint(painter, option, index);
         }
         break;
     case FiltersModel::PropertyColumn:
         if (groupType == FilterItem::Condition)
-            paintComboBox(m_propertyStrings);
+            paintComboBox(m_propertyStrings, false);
         else
             QStyledItemDelegate::paint(painter, option, index);
         break;
@@ -313,9 +368,27 @@ void FilterItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
             QStyledItemDelegate::paint(painter, valueOption, QModelIndex());
             break;
         }
+        case QMetaType::Bool: {
+            QStyleOptionViewItem valueOption (option);
+            valueOption.text = index.model()->data(index).toBool()?tr("TRUE"):tr("FALSE");
+            QStyledItemDelegate::paint(painter, valueOption, QModelIndex());
+            break;
+        }
         default:
             QStyledItemDelegate::paint(painter, option, index);
             break;
+        }
+        break;
+    }
+    case FiltersModel::InvertedColumn: {
+        FilterItem *item = static_cast<FilterItem *>(index.internalPointer());
+        Q_CHECK_PTR(item);
+        if (groupType == FilterItem::Condition)
+            QStyledItemDelegate::paint(painter, option, index);
+        else {
+            QStyleOptionViewItem notCheckOption (option);
+            notCheckOption.features = QStyleOptionViewItem::None;
+            QStyledItemDelegate::paint(painter, notCheckOption, QModelIndex());
         }
         break;
     }

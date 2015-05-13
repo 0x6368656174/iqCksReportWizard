@@ -31,7 +31,12 @@ QVariant FiltersModel::data(const QModelIndex &index, int role) const
 
     switch (role) {
     case Qt::CheckStateRole: {
-        if (index.column() == CaseSensitivityColumn) {
+        if (index.column() == InvertedColumn) {
+            if (filter->inverted())
+                return Qt::Checked;
+            else
+                return Qt::Unchecked;
+        } else if (index.column() == CaseSensitivityColumn) {
             if (filter->caseSensitivity() == Qt::CaseSensitive)
                 return Qt::Checked;
             else
@@ -101,6 +106,10 @@ QVariant FiltersModel::data(const QModelIndex &index, int role) const
             }
             break;
         }
+        case InvertedColumn: {
+            return QVariant();
+            break;
+        }
         case CaseSensitivityColumn: {
             return QVariant();
             break;
@@ -123,6 +132,13 @@ Qt::ItemFlags FiltersModel::flags(const QModelIndex &index) const
     switch (index.column()) {
     case TypeColumn:
         return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
+        break;
+    case InvertedColumn:
+        if (filter->type() == FilterItem::Condition) {
+            return QAbstractItemModel::flags(index) | Qt::ItemIsUserCheckable;
+        } else {
+            return QAbstractItemModel::flags(index);
+        }
         break;
     case CaseSensitivityColumn:
         if (filter->type() == FilterItem::Condition) {
@@ -158,6 +174,9 @@ QVariant FiltersModel::headerData(int section, Qt::Orientation orientation, int 
             break;
         case ValueColumn:
             return tr("Value");
+            break;
+        case InvertedColumn:
+            return tr("Inverted");
             break;
         case CaseSensitivityColumn:
             return tr("Case Sensitive");
@@ -218,7 +237,7 @@ int FiltersModel::rowCount(const QModelIndex &parent) const
 int FiltersModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return 5;
+    return 6;
 }
 
 FilterItem *FiltersModel::rootFilter() const
@@ -261,7 +280,9 @@ bool FiltersModel::setData(const QModelIndex &index, const QVariant &value, int 
 
     switch (role) {
     case Qt::CheckStateRole: {
-        if (index.column() == CaseSensitivityColumn)
+        if (index.column() == InvertedColumn)
+            filter->setInverted(value == Qt::Checked);
+        else if (index.column() == CaseSensitivityColumn)
             filter->setCaseSensitivity(value == Qt::Checked?Qt::CaseSensitive:Qt::CaseInsensitive);
         else
             return false;
@@ -298,6 +319,9 @@ bool FiltersModel::setData(const QModelIndex &index, const QVariant &value, int 
             if (newType == QMetaType::Int
                     && oldType != newType)
                 filter->setValue(0);
+            if (newType == QMetaType::Bool
+                    && oldType != newType)
+                filter->setValue(false);
             if (newType == QMetaType::QString
                     && oldType != newType)
                 filter->setValue("");
@@ -308,7 +332,6 @@ bool FiltersModel::setData(const QModelIndex &index, const QVariant &value, int 
                 switch (filter->operation()) {
                 case FilterItem::NotSetOperation:
                 case FilterItem::Equals:
-                case FilterItem::NotEquals:
                 case FilterItem::Greater:
                 case FilterItem::GreaterOrEquals:
                 case FilterItem::Less:
@@ -319,11 +342,19 @@ bool FiltersModel::setData(const QModelIndex &index, const QVariant &value, int 
                     break;
                 }
                 break;
+            case QMetaType::Bool:
+                switch (filter->operation()) {
+                case FilterItem::NotSetOperation:
+                case FilterItem::Equals:
+                    break;
+                default:
+                    filter->setOperation(FilterItem::NotSetOperation);
+                    break;
+                }
             case QMetaType::QString:
                 switch (filter->operation()) {
                 case FilterItem::NotSetOperation:
                 case FilterItem::Equals:
-                case FilterItem::NotEquals:
                 case FilterItem::StartsWith:
                 case FilterItem::EndsWith:
                 case FilterItem::Contains:

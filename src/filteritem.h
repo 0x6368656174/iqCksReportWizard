@@ -20,22 +20,30 @@ public:
     enum Properties
     {
         NotSetPorperty,
+        ChannelName,
+        ChannelNumber,
+        HeaderInfo,
+        Priority,
+        Addresses,
+        Cc,
+        SenderTime,
+        Sender,
+        SenderInfo,
+        Text,
         DateTime,
         Direction,
-        Channel,
-        Number,
-        AdditionalInfo,
-        KS,
-        Address,
-        Sender,
-        Text
+        ChannelId,
+        Journal,
+        SerialNumber,
+        Svc,
+        RouteId,
+        MessageType
     };
 
     enum Operation
     {
         NotSetOperation,
         Equals,
-        NotEquals,
         StartsWith,
         EndsWith,
         Contains,
@@ -85,6 +93,9 @@ public:
     Qt::CaseSensitivity caseSensitivity() const;
     void setCaseSensitivity(const Qt::CaseSensitivity &caseSensitivity);
 
+    bool inverted() const;
+    void setInverted(bool inverted);
+
 private:
     FilterItem *m_parentFilter;
     QList<FilterItem *> m_childFilters;
@@ -93,6 +104,7 @@ private:
     Operation m_operation;
     QVariant m_value;
     Qt::CaseSensitivity m_caseSensitivity;
+    bool m_inverted;
 };
 
 #endif // FILTERITEM_H

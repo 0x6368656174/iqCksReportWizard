@@ -13,6 +13,7 @@ public:
         PropertyColumn,
         OperationColumn,
         ValueColumn,
+        InvertedColumn,
         CaseSensitivityColumn
     };
 

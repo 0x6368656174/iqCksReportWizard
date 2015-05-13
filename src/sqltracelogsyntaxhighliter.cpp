@@ -13,7 +13,7 @@ SqlTraceLogSyntaxHighliter::SqlTraceLogSyntaxHighliter(QObject *parent) :
                     << "\\bDESC\\b" << "\\bLIMIT\\b" <<"\\bVALUES\\b"
                     << "\\bAS\\b" << "\\bGROUP\\b" << "\\bLEFT\\b"
                     << "\\bOUTER\\b" << "\\bJOIN\\b" << "\\bON\\b"
-                    << "\\bCAST\\b" << "\\bPREPARE\\b";
+                    << "\\bCAST\\b" << "\\bPREPARE\\b" << "\\bDISTINCT\\b";
     foreach (const QString &pattern, keywordPatterns) {
         rule.pattern = QRegExp(pattern);
         rule.format = m_keywordFormat;

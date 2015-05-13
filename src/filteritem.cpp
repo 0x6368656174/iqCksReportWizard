@@ -6,7 +6,8 @@ FilterItem::FilterItem(FilterItem *parent):
     m_property(NotSetPorperty),
     m_operation(NotSetOperation),
     m_value(QVariant()),
-    m_caseSensitivity(Qt::CaseInsensitive)
+    m_caseSensitivity(Qt::CaseInsensitive),
+    m_inverted(false)
 {
 }
 
@@ -107,8 +108,17 @@ QMetaType::Type FilterItem::propertyType(Properties property) const
     case DateTime:
         return QMetaType::QDateTime;
         break;
-    case Number:
+    case ChannelNumber:
+    case Priority:
+    case Direction:
+    case ChannelId:
+    case SerialNumber:
+    case RouteId:
+    case MessageType:
         return QMetaType::Int;
+        break;
+    case Svc:
+        return QMetaType::Bool;
         break;
     default:
         return QMetaType::QString;
@@ -177,4 +187,15 @@ void FilterItem::setCaseSensitivity(const Qt::CaseSensitivity &caseSensitivity)
 {
     m_caseSensitivity = caseSensitivity;
 }
+
+bool FilterItem::inverted() const
+{
+    return m_inverted;
+}
+
+void FilterItem::setInverted(bool invert)
+{
+    m_inverted = invert;
+}
+
 

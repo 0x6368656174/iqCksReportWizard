@@ -48,6 +48,7 @@ private:
     FiltersModel *m_filtersModel;
     IqOrmModel<ArchiveRecord> *m_findModel;
     QMainWindow *m_mainWindow;
+    QHash<FilterItem::Properties, QString> m_propetriesNames;
 };
 
 #endif // FILTERSWIDGET_H

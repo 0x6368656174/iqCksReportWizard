@@ -22,6 +22,26 @@ FiltersWidget::FiltersWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->filtersTreeView->setModel(m_filtersModel);
+
+    m_propetriesNames[FilterItem::ChannelName] = "channelName";
+    m_propetriesNames[FilterItem::ChannelNumber] = "channelNumber";
+    m_propetriesNames[FilterItem::HeaderInfo] = "headerInfo";
+    m_propetriesNames[FilterItem::Priority] = "priority";
+    m_propetriesNames[FilterItem::Addresses] = "addresses";
+    m_propetriesNames[FilterItem::Cc] = "cc";
+    m_propetriesNames[FilterItem::SenderTime] = "senderTime";
+    m_propetriesNames[FilterItem::Sender] = "sender";
+    m_propetriesNames[FilterItem::SenderInfo] = "senderInfo";
+    m_propetriesNames[FilterItem::Text] = "text";
+    m_propetriesNames[FilterItem::DateTime] = "dateTime";
+    m_propetriesNames[FilterItem::Direction] = "direction";
+    m_propetriesNames[FilterItem::ChannelId] = "channelId";
+    m_propetriesNames[FilterItem::Journal] = "journal";
+    m_propetriesNames[FilterItem::SerialNumber] = "serialNumber";
+    m_propetriesNames[FilterItem::Svc] = "svc";
+    m_propetriesNames[FilterItem::RouteId] = "routeId";
+    m_propetriesNames[FilterItem::MessageType] = "msgType";
+    m_propetriesNames[FilterItem::NotSetPorperty] = "";
 }
 
 FiltersWidget::~FiltersWidget()
@@ -144,32 +164,9 @@ IqOrmAbstractFilter *FiltersWidget::createFilter(const FilterItem *filterItem) c
         switch (filterItem->property()) {
         case FilterItem::NotSetPorperty:
             break;
-        case FilterItem::DateTime:
-            resultFilter->setProperty("dateTime");
-            break;
-        case FilterItem::Direction:
-            resultFilter->setProperty("direction");
-            break;
-        case FilterItem::Channel:
-            resultFilter->setProperty("channelName");
-            break;
-        case FilterItem::Number:
-            resultFilter->setProperty("channelNumber");
-            break;
-        case FilterItem::AdditionalInfo:
-            resultFilter->setProperty("headerInfo");
-            break;
-        case FilterItem::KS:
-            //TODO Сделать КС
-            break;
-        case FilterItem::Address:
-            resultFilter->setProperty("addresses");
-            break;
-        case FilterItem::Sender:
-            resultFilter->setProperty("sender");
-            break;
-        case FilterItem::Text:
-            resultFilter->setProperty("text");
+        default:
+            Q_ASSERT(m_propetriesNames.contains(filterItem->property()));
+            resultFilter->setProperty(m_propetriesNames[filterItem->property()]);
             break;
         }
 
@@ -178,9 +175,6 @@ IqOrmAbstractFilter *FiltersWidget::createFilter(const FilterItem *filterItem) c
             break;
         case FilterItem::Equals:
             resultFilter->setCondition(IqOrmFilter::Equals);
-            break;
-        case FilterItem::NotEquals:
-            resultFilter->setCondition(IqOrmFilter::NotEquals);
             break;
         case FilterItem::StartsWith:
             resultFilter->setCondition(IqOrmFilter::StartsWith);
@@ -207,6 +201,7 @@ IqOrmAbstractFilter *FiltersWidget::createFilter(const FilterItem *filterItem) c
 
         resultFilter->setValue(filterItem->value());
         resultFilter->setCaseSensitivity(filterItem->caseSensitivity());
+        resultFilter->setInverted(filterItem->inverted());
         filter = resultFilter;
         break;
     }
@@ -264,33 +259,9 @@ QJsonObject FiltersWidget::createFilterJson(const FilterItem *filterItem) const
         switch (filterItem->property()) {
         case FilterItem::NotSetPorperty:
             break;
-        case FilterItem::DateTime:
-            propertyName = "dateTime";
-            break;
-        case FilterItem::Direction:
-            propertyName = "direction";
-            break;
-        case FilterItem::Channel:
-            propertyName = "channelName";
-            break;
-        case FilterItem::Number:
-            propertyName = "channelNumber";
-            break;
-        case FilterItem::AdditionalInfo:
-            propertyName = "headerInfo";
-            break;
-        case FilterItem::KS:
-            propertyName = "ks";
-            break;
-        case FilterItem::Address:
-            propertyName = "addresses";
-            break;
-        case FilterItem::Sender:
-            propertyName = "sender";
-            break;
-        case FilterItem::Text:
-            propertyName = "text";
-            break;
+        default:
+            Q_ASSERT(m_propetriesNames.contains(filterItem->property()));
+            propertyName = m_propetriesNames[filterItem->property()];
         }
         resultObject.insert("property", propertyName);
 
@@ -300,9 +271,6 @@ QJsonObject FiltersWidget::createFilterJson(const FilterItem *filterItem) const
             break;
         case FilterItem::Equals:
             operation = "equals";
-            break;
-        case FilterItem::NotEquals:
-            operation = "notEquals";
             break;
         case FilterItem::StartsWith:
             operation = "startsWith";
@@ -340,6 +308,7 @@ QJsonObject FiltersWidget::createFilterJson(const FilterItem *filterItem) const
             qWarning() << tr("Error to save filter value to Json.");
 
         resultObject.insert("caseSensitivity", filterItem->caseSensitivity() == Qt::CaseSensitive);
+        resultObject.insert("inverted", filterItem->inverted());
 
         return resultObject;
 
@@ -392,25 +361,18 @@ bool FiltersWidget::createItemFromJson(const QJsonObject &filterObject, const QM
         QString property = filterObject.value("property").toString();
         FilterItem::Properties itemProperty = FilterItem::NotSetPorperty;
 
-        if (property.compare("dateTime", Qt::CaseInsensitive) == 0)
-            itemProperty = FilterItem::DateTime;
-        else if (property.compare("direction", Qt::CaseInsensitive) == 0)
-            itemProperty = FilterItem::Direction;
-        else if (property.compare("channelName", Qt::CaseInsensitive) == 0)
-            itemProperty = FilterItem::Channel;
-        else if (property.compare("channelNumber", Qt::CaseInsensitive) == 0)
-            itemProperty = FilterItem::Number;
-        else if (property.compare("headerInfo", Qt::CaseInsensitive) == 0)
-            itemProperty = FilterItem::AdditionalInfo;
-        else if (property.compare("ks", Qt::CaseInsensitive) == 0)
-            itemProperty = FilterItem::KS;
-        else if (property.compare("addresses", Qt::CaseInsensitive) == 0)
-            itemProperty = FilterItem::Address;
-        else if (property.compare("sender", Qt::CaseInsensitive) == 0)
-            itemProperty = FilterItem::Sender;
-        else if (property.compare("text", Qt::CaseInsensitive) == 0)
-            itemProperty = FilterItem::Text;
-        else
+        QHashIterator<FilterItem::Properties, QString> properitesNamesI(m_propetriesNames);
+        bool propertyFound = false;
+        while (properitesNamesI.hasNext()) {
+            properitesNamesI.next();
+            if (property.compare(properitesNamesI.value(), Qt::CaseInsensitive) == 0) {
+                itemProperty = properitesNamesI.key();
+                propertyFound = true;
+                break;
+            }
+        }
+
+        if (!propertyFound)
             qWarning() << tr("Unknown property \"%0\".")
                           .arg(property);
 
@@ -422,8 +384,6 @@ bool FiltersWidget::createItemFromJson(const QJsonObject &filterObject, const QM
 
         if (operation.compare("equals", Qt::CaseInsensitive) == 0)
             itemOperation = FilterItem::Equals;
-        else if (operation.compare("notEquals", Qt::CaseInsensitive) == 0)
-            itemOperation = FilterItem::NotEquals;
         else if (operation.compare("startsWith", Qt::CaseInsensitive) == 0)
             itemOperation = FilterItem::StartsWith;
         else if (operation.compare("endsWith", Qt::CaseInsensitive) == 0)
@@ -460,6 +420,7 @@ bool FiltersWidget::createItemFromJson(const QJsonObject &filterObject, const QM
         }
 
         Qt::CheckState caseSensitivityValue = filterObject.value("caseSensitivity").toBool()?Qt::Checked:Qt::Unchecked;
+        Qt::CheckState inverted = filterObject.value("inverted").toBool()?Qt::Checked:Qt::Unchecked;
 
 
         QModelIndex typeIndex = m_filtersModel->index(row, FiltersModel::TypeColumn, parentIndex);
@@ -476,6 +437,9 @@ bool FiltersWidget::createItemFromJson(const QJsonObject &filterObject, const QM
 
         QModelIndex caseSensitivityIndex = m_filtersModel->index(row, FiltersModel::CaseSensitivityColumn, parentIndex);
         m_filtersModel->setData(caseSensitivityIndex, caseSensitivityValue, Qt::CheckStateRole);
+
+        QModelIndex invertedIndex = m_filtersModel->index(row, FiltersModel::InvertedColumn, parentIndex);
+        m_filtersModel->setData(invertedIndex, inverted, Qt::CheckStateRole);
     } else if (itemType.compare("and", Qt::CaseInsensitive) == 0) {
         QModelIndex typeIndex = m_filtersModel->index(row, FiltersModel::TypeColumn, parentIndex);
         m_filtersModel->setData(typeIndex, FilterItem::AndGroup, Qt::EditRole);
