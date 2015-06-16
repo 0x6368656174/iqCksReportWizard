@@ -1,6 +1,7 @@
 #include "resultwidget.h"
 #include "ui_resultwidget.h"
 #include <QSettings>
+#include "resultitemdelegate.h"
 
 ResultWidget::ResultWidget(QWidget *parent) :
     QGroupBox(parent),
@@ -15,8 +16,11 @@ ResultWidget::ResultWidget(QWidget *parent) :
     m_findModel->showProperty("channelNumber", tr("Channel Number"));
     m_findModel->showProperty("headerInfo", tr("Header Additional Info"));
     m_findModel->showProperty("addresses", tr("Addresses"));
+    m_findModel->showProperty("cc", tr("Copies"));
     m_findModel->showProperty("sender", tr("Sender"));
     m_findModel->showProperty("text", tr("Text"));
+
+    ui->resultTableView->setItemDelegate(new ResultItemDelegate(ui->resultTableView));
     ui->resultTableView->setModel(m_findModel);
 
     m_verticalSplitter->setOrientation(Qt::Vertical);

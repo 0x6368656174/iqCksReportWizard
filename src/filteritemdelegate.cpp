@@ -8,6 +8,7 @@
 #include <QTimer>
 #include <QDebug>
 #include <QMessageBox>
+#include <QLineEdit>
 
 FilterItemDelegate::FilterItemDelegate(QObject *parent) :
     QStyledItemDelegate(parent),
@@ -27,6 +28,7 @@ FilterItemDelegate::FilterItemDelegate(QObject *parent) :
     m_operationStrings[FilterItem::GreaterOrEquals] = tr("greater or equals");
     m_operationStrings[FilterItem::Less] = tr("less");
     m_operationStrings[FilterItem::LessOrEquals] = tr("less or equals");
+    m_operationStrings[FilterItem::Overlap] = tr("overlap");
 
     m_dateTimeOperationStrings[FilterItem::NotSetOperation] = m_operationStrings[FilterItem::NotSetOperation];
     m_dateTimeOperationStrings[FilterItem::Equals] = m_operationStrings[FilterItem::Equals];
@@ -51,14 +53,17 @@ FilterItemDelegate::FilterItemDelegate(QObject *parent) :
     m_boolOperationStrings[FilterItem::NotSetOperation] = m_operationStrings[FilterItem::NotSetOperation];
     m_boolOperationStrings[FilterItem::Equals] = m_operationStrings[FilterItem::Equals];
 
+    m_stringListOperationStrings[FilterItem::NotSetOperation] = m_operationStrings[FilterItem::NotSetOperation];
+    m_stringListOperationStrings[FilterItem::Equals] = m_operationStrings[FilterItem::Equals];
+    m_stringListOperationStrings[FilterItem::Overlap] = m_operationStrings[FilterItem::Overlap];
+
     m_propertyStrings[FilterItem::NotSetPorperty] = tr("Not set");
     m_propertyStrings[FilterItem::ChannelName] = tr("Channel");
     m_propertyStrings[FilterItem::ChannelNumber] = tr("Number");
     m_propertyStrings[FilterItem::HeaderInfo] = tr("Additional info");
     m_propertyStrings[FilterItem::Priority] = tr("Priopity");
-    //TODO временно не работают из-за того, что в таблице используются массивы
-//    m_propertyStrings[FilterItem::Addresses] = tr("Address");
-//    m_propertyStrings[FilterItem::Cc] = tr("Cc");
+    m_propertyStrings[FilterItem::Addresses] = tr("Addresses");
+    m_propertyStrings[FilterItem::Cc] = tr("Cc");
     m_propertyStrings[FilterItem::SenderTime] = tr("Sender time");
     m_propertyStrings[FilterItem::Sender] = tr("Sender");
     m_propertyStrings[FilterItem::SenderInfo] = tr("Sender Info");
@@ -124,6 +129,10 @@ QWidget *FilterItemDelegate::createEditor(QWidget *parent, const QStyleOptionVie
         }
         case QMetaType::Bool: {
             return createComboBox(m_boolOperationStrings, item->inverted());
+            break;
+        }
+        case QMetaType::QStringList: {
+            return createComboBox(m_stringListOperationStrings, item->inverted());
             break;
         }
         default:
@@ -284,6 +293,29 @@ void FilterItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model
         model->setData(index, value, Qt::EditRole);
         break;
     }
+    case FiltersModel::ValueColumn: {
+        FilterItem *item = static_cast<FilterItem *>(index.internalPointer());
+        Q_CHECK_PTR(item);
+        qDebug() << item->propertyType();
+        switch (item->propertyType()) {
+        case QMetaType::Bool: {
+            QComboBox *comboBox = static_cast<QComboBox*>(editor);
+            int value = comboBox->currentData().toInt();
+            model->setData(index, value, Qt::EditRole);
+            break;
+        }
+        case QMetaType::QStringList: {
+            QLineEdit *lineEdit = static_cast<QLineEdit *>(editor);
+            QStringList value = lineEdit->text().split(',');
+            model->setData(index, value, Qt::EditRole);
+            break;
+        }
+        default:
+            QStyledItemDelegate::setModelData(editor, model, index);
+            break;
+        }
+        break;
+    }
     default:
         QStyledItemDelegate::setModelData(editor, model, index);
         break;
@@ -371,6 +403,12 @@ void FilterItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
         case QMetaType::Bool: {
             QStyleOptionViewItem valueOption (option);
             valueOption.text = index.model()->data(index).toBool()?tr("TRUE"):tr("FALSE");
+            QStyledItemDelegate::paint(painter, valueOption, QModelIndex());
+            break;
+        }
+        case QMetaType::QStringList: {
+            QStyleOptionViewItem valueOption (option);
+            valueOption.text = index.model()->data(index).toStringList().join(", ");
             QStyledItemDelegate::paint(painter, valueOption, QModelIndex());
             break;
         }

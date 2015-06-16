@@ -6,7 +6,7 @@ FilterItem::FilterItem(FilterItem *parent):
     m_property(NotSetPorperty),
     m_operation(NotSetOperation),
     m_value(QVariant()),
-    m_caseSensitivity(Qt::CaseInsensitive),
+    m_caseSensitivity(Qt::CaseSensitive),
     m_inverted(false)
 {
 }
@@ -99,7 +99,7 @@ QMetaType::Type FilterItem::propertyType() const
     return propertyType(property());
 }
 
-QMetaType::Type FilterItem::propertyType(Properties property) const
+QMetaType::Type FilterItem::propertyType(Properties property)
 {
     switch (property) {
     case NotSetPorperty:
@@ -119,6 +119,10 @@ QMetaType::Type FilterItem::propertyType(Properties property) const
         break;
     case Svc:
         return QMetaType::Bool;
+        break;
+    case Addresses:
+    case Cc:
+        return QMetaType::QStringList;
         break;
     default:
         return QMetaType::QString;

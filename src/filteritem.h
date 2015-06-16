@@ -50,7 +50,8 @@ public:
         Greater,
         GreaterOrEquals,
         Less,
-        LessOrEquals
+        LessOrEquals,
+        Overlap
     };
 
 
@@ -67,7 +68,7 @@ public:
 
     QMetaType::Type propertyType() const;
 
-    QMetaType::Type propertyType(Properties property) const;
+    static QMetaType::Type propertyType(Properties property);
 
     int row() const;
 

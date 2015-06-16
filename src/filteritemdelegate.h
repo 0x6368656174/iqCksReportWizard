@@ -29,6 +29,7 @@ private:
     QMap<int, QString> m_intOperationStrings;
     QMap<int, QString> m_stringOperationStrings;
     QMap<int, QString> m_boolOperationStrings;
+    QMap<int, QString> m_stringListOperationStrings;
     QMap<int, QString> m_propertyStrings;
     QMainWindow *m_mainWindow;
 };

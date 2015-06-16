@@ -39,8 +39,8 @@ void ArchiveRecord::reset()
     setChannelNumber(0);
     setHeaderInfo("");
     setPriority(0);
-    setAddresses("");
-    setCc("");
+    setAddresses(QStringList());
+    setCc(QStringList());
     setSenderTime("");
     setSender("");
     setSenderInfo("");
@@ -107,12 +107,12 @@ void ArchiveRecord::setPriority(int priority)
     }
 }
 
-QString ArchiveRecord::addresses() const
+QStringList ArchiveRecord::addresses() const
 {
     return m_addresses;
 }
 
-void ArchiveRecord::setAddresses(const QString &address)
+void ArchiveRecord::setAddresses(const QStringList &address)
 {
     if (m_addresses != address) {
         m_addresses = address;
@@ -120,12 +120,12 @@ void ArchiveRecord::setAddresses(const QString &address)
     }
 }
 
-QString ArchiveRecord::cc() const
+QStringList ArchiveRecord::cc() const
 {
     return m_cc;
 }
 
-void ArchiveRecord::setCc(const QString &cc)
+void ArchiveRecord::setCc(const QStringList &cc)
 {
     if (m_cc != cc) {
         m_cc = cc;

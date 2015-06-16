@@ -197,6 +197,9 @@ IqOrmAbstractFilter *FiltersWidget::createFilter(const FilterItem *filterItem) c
         case FilterItem::LessOrEquals:
             resultFilter->setCondition(IqOrmFilter::LessOrEquals);
             break;
+        case FilterItem::Overlap:
+            resultFilter->setCondition(IqOrmFilter::Overlap);
+            break;
         }
 
         resultFilter->setValue(filterItem->value());
@@ -293,6 +296,9 @@ QJsonObject FiltersWidget::createFilterJson(const FilterItem *filterItem) const
         case FilterItem::LessOrEquals:
             operation = "lessOrEquals";
             break;
+        case FilterItem::Overlap:
+            operation = "overlap";
+            break;
         }
         resultObject.insert("operation", operation);
 
@@ -302,7 +308,13 @@ QJsonObject FiltersWidget::createFilterJson(const FilterItem *filterItem) const
             resultObject.insert("value", filterItem->value().toDouble());
         else if (filterItem->value().type() == QVariant::Bool)
             resultObject.insert("value", filterItem->value().toBool());
-        else if (filterItem->value().canConvert<QString>())
+        else if (filterItem->value().type() == QVariant::StringList) {
+            QJsonArray valueArray;
+            foreach (const QString &string, filterItem->value().toStringList()) {
+                valueArray.append(QJsonValue(string));
+            }
+            resultObject.insert("value", valueArray);
+        } else if (filterItem->value().canConvert<QString>())
             resultObject.insert("value", filterItem->value().toString());
         else
             qWarning() << tr("Error to save filter value to Json.");
@@ -398,6 +410,8 @@ bool FiltersWidget::createItemFromJson(const QJsonObject &filterObject, const QM
             itemOperation = FilterItem::Less;
         else if (operation.compare("lessOrEquals", Qt::CaseInsensitive) == 0)
             itemOperation = FilterItem::LessOrEquals;
+        else if (operation.compare("overlap", Qt::CaseInsensitive) == 0)
+            itemOperation = FilterItem::Overlap;
         else
             qWarning() << tr("Unknown operation \"%0\".")
                           .arg(operation);
@@ -414,6 +428,18 @@ bool FiltersWidget::createItemFromJson(const QJsonObject &filterObject, const QM
             itemValue = value.toDouble();
         else if (value.isString())
             itemValue = value.toString();
+        else if (value.isArray()) {
+            QStringList valueStringList;
+            QJsonArray valueArray = value.toArray();
+            for (int i = 0; i < valueArray.count(); ++i) {
+                if (!valueArray.at(i).isString()) {
+                    qWarning() << tr("Unknown value.");
+                    return false;
+                }
+                valueStringList << valueArray.at(i).toString();
+            }
+            itemValue = valueStringList;
+        }
         else {
             qWarning() << tr("Unknown value.");
             return false;

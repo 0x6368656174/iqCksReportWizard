@@ -13,8 +13,8 @@ class ArchiveRecord : public QObject, public IqOrmObject
     Q_PROPERTY(int channelNumber READ channelNumber WRITE setChannelNumber NOTIFY channelNumberChanged)
     Q_PROPERTY(QString headerInfo READ headerInfo WRITE setHeaderInfo NOTIFY headerInfoChanged)
     Q_PROPERTY(int priority READ priority WRITE setPriority NOTIFY priorityChanged)
-    Q_PROPERTY(QString addresses READ addresses WRITE setAddresses NOTIFY addressesChanged)
-    Q_PROPERTY(QString cc READ cc WRITE setCc NOTIFY ccChanged)
+    Q_PROPERTY(QStringList addresses READ addresses WRITE setAddresses NOTIFY addressesChanged)
+    Q_PROPERTY(QStringList cc READ cc WRITE setCc NOTIFY ccChanged)
     Q_PROPERTY(QString senderTime READ senderTime WRITE setSenderTime NOTIFY senderTimeChanged)
     Q_PROPERTY(QString sender READ sender WRITE setSender NOTIFY senderChanged)
     Q_PROPERTY(QString senderInfo READ senderInfo WRITE setSenderInfo NOTIFY senderInfoChanged)
@@ -49,11 +49,11 @@ public:
     int priority() const;
     void setPriority(int priority);
 
-    QString addresses() const;
-    void setAddresses(const QString &addresses);
+    QStringList addresses() const;
+    void setAddresses(const QStringList &addresses);
 
-    QString cc() const;
-    void setCc(const QString &cc);
+    QStringList cc() const;
+    void setCc(const QStringList &cc);
 
     QString senderTime() const;
     void setSenderTime(const QString &senderTime);
@@ -116,8 +116,8 @@ private:
     int m_channelNumber;
     QString m_headerInfo;
     int m_priority;
-    QString m_addresses;
-    QString m_cc;
+    QStringList m_addresses;
+    QStringList m_cc;
     QString m_senderTime;
     QString m_sender;
     QString m_senderInfo;

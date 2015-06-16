@@ -374,7 +374,7 @@ bool FiltersModel::setData(const QModelIndex &index, const QVariant &value, int 
             filter->setOperation(static_cast<FilterItem::Operation>(value.toInt()));
             break;
         case ValueColumn:
-            filter->setValue(value.toString());
+            filter->setValue(value);
             break;
         case CaseSensitivityColumn:
             break;
