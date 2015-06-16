@@ -44,3 +44,6 @@ CMakeFiles/
 cmake_install.cmake
 *_automoc.cpp
 install_manifest.txt
+
+#IDE
+.idea
