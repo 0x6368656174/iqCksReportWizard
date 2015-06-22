@@ -2,6 +2,51 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="ru_RU">
 <context>
+    <name>AddressEditDialog</name>
+    <message>
+        <location filename="addresseditdialog.ui" line="14"/>
+        <source>Address Edit</source>
+        <translation>Редактирование адресов</translation>
+    </message>
+    <message>
+        <location filename="addresseditdialog.ui" line="27"/>
+        <source>Address:</source>
+        <translation>Адрес:</translation>
+    </message>
+    <message>
+        <location filename="addresseditdialog.ui" line="42"/>
+        <location filename="addresseditdialog.ui" line="136"/>
+        <source>Add</source>
+        <translation>Добавить</translation>
+    </message>
+    <message>
+        <location filename="addresseditdialog.ui" line="58"/>
+        <location filename="addresseditdialog.ui" line="145"/>
+        <source>Remove</source>
+        <translation>Удалить</translation>
+    </message>
+    <message>
+        <location filename="addresseditdialog.ui" line="69"/>
+        <source>Up</source>
+        <translation>Вверх</translation>
+    </message>
+    <message>
+        <location filename="addresseditdialog.ui" line="80"/>
+        <source>Down</source>
+        <translation>Вниз</translation>
+    </message>
+    <message>
+        <location filename="addresseditdialog.ui" line="154"/>
+        <source>Move Up</source>
+        <translation>Переместить Вверх</translation>
+    </message>
+    <message>
+        <location filename="addresseditdialog.ui" line="163"/>
+        <source>Move Down</source>
+        <translation>Переместить Вниз</translation>
+    </message>
+</context>
+<context>
     <name>ConfigDialog</name>
     <message>
         <location filename="configdialog.ui" line="14"/>
@@ -57,33 +102,33 @@
 <context>
     <name>FilterItemDelegate</name>
     <message>
-        <location filename="filteritemdelegate.cpp" line="16"/>
-        <location filename="filteritemdelegate.cpp" line="54"/>
+        <location filename="filteritemdelegate.cpp" line="18"/>
+        <location filename="filteritemdelegate.cpp" line="61"/>
         <source>Not set</source>
         <translation>НЕТ</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="17"/>
+        <location filename="filteritemdelegate.cpp" line="19"/>
         <source>Condition</source>
         <translation>Условие</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="18"/>
+        <location filename="filteritemdelegate.cpp" line="20"/>
         <source>And</source>
         <translation>Группа И</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="19"/>
+        <location filename="filteritemdelegate.cpp" line="21"/>
         <source>Or</source>
         <translation>Группа ИЛИ</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="21"/>
+        <location filename="filteritemdelegate.cpp" line="23"/>
         <source>not set</source>
         <translation>НЕТ</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="22"/>
+        <location filename="filteritemdelegate.cpp" line="24"/>
         <source>equals</source>
         <translation>равно</translation>
     </message>
@@ -92,77 +137,92 @@
         <translation type="obsolete">не равно</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="23"/>
+        <location filename="filteritemdelegate.cpp" line="25"/>
         <source>start with</source>
         <translation>начинается с </translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="24"/>
+        <location filename="filteritemdelegate.cpp" line="26"/>
         <source>end with</source>
         <translation>заканчивается на</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="25"/>
+        <location filename="filteritemdelegate.cpp" line="27"/>
         <source>contains</source>
         <translation>содержит</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="26"/>
+        <location filename="filteritemdelegate.cpp" line="28"/>
         <source>greater</source>
         <translation>больше</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="27"/>
+        <location filename="filteritemdelegate.cpp" line="29"/>
         <source>greater or equals</source>
         <translation>больше или равно</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="28"/>
+        <location filename="filteritemdelegate.cpp" line="30"/>
         <source>less</source>
         <translation>меньше</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="29"/>
+        <location filename="filteritemdelegate.cpp" line="31"/>
         <source>less or equals</source>
         <translation>меньше или равно</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="58"/>
+        <location filename="filteritemdelegate.cpp" line="32"/>
+        <source>overlap</source>
+        <translation>перекрывает</translation>
+    </message>
+    <message>
+        <location filename="filteritemdelegate.cpp" line="65"/>
         <source>Priopity</source>
         <translation>Приоритет</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="60"/>
+        <location filename="filteritemdelegate.cpp" line="66"/>
+        <source>Addresses</source>
+        <translation>Адресаты</translation>
+    </message>
+    <message>
+        <location filename="filteritemdelegate.cpp" line="67"/>
         <source>Cc</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="61"/>
+        <location filename="filteritemdelegate.cpp" line="68"/>
         <source>Sender time</source>
         <translation>Время отправления</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="65"/>
+        <location filename="filteritemdelegate.cpp" line="70"/>
+        <source>Sender Info</source>
+        <translation>Информация О Отправителе</translation>
+    </message>
+    <message>
+        <location filename="filteritemdelegate.cpp" line="72"/>
         <source>Date time of archivate</source>
         <translation>Дата и время архивации</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="66"/>
+        <location filename="filteritemdelegate.cpp" line="73"/>
         <source>Direction</source>
         <translation>Направление</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="55"/>
+        <location filename="filteritemdelegate.cpp" line="62"/>
         <source>Channel</source>
         <translation>Имя канала</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="56"/>
+        <location filename="filteritemdelegate.cpp" line="63"/>
         <source>Number</source>
         <translation>Номер канала</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="57"/>
+        <location filename="filteritemdelegate.cpp" line="64"/>
         <source>Additional info</source>
         <translation>Доп. информация заголовка</translation>
     </message>
@@ -171,75 +231,74 @@
         <translation type="obsolete">КС</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="59"/>
         <source>Address</source>
-        <translation>Адресаты</translation>
+        <translation type="obsolete">Адресаты</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="62"/>
+        <location filename="filteritemdelegate.cpp" line="69"/>
         <source>Sender</source>
         <translation>Отправитель</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="64"/>
+        <location filename="filteritemdelegate.cpp" line="71"/>
         <source>Text</source>
         <translation>Текс</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="67"/>
+        <location filename="filteritemdelegate.cpp" line="74"/>
         <source>Channel ID</source>
         <translation>ID канала</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="68"/>
+        <location filename="filteritemdelegate.cpp" line="75"/>
         <source>Journal</source>
         <translation>Журнал</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="69"/>
+        <location filename="filteritemdelegate.cpp" line="76"/>
         <source>Serial number</source>
         <translation>Серийный номер</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="70"/>
+        <location filename="filteritemdelegate.cpp" line="77"/>
         <source>SVC</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="71"/>
+        <location filename="filteritemdelegate.cpp" line="78"/>
         <source>Route ID</source>
         <translation>ID маршрута</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="72"/>
+        <location filename="filteritemdelegate.cpp" line="79"/>
         <source>Message Type</source>
         <translation>Тип сообщения</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="88"/>
-        <location filename="filteritemdelegate.cpp" line="302"/>
+        <location filename="filteritemdelegate.cpp" line="95"/>
+        <location filename="filteritemdelegate.cpp" line="349"/>
         <source>NOT %0</source>
         <translation>НЕ %0</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="158"/>
-        <location filename="filteritemdelegate.cpp" line="369"/>
+        <location filename="filteritemdelegate.cpp" line="169"/>
+        <location filename="filteritemdelegate.cpp" line="416"/>
         <source>FALSE</source>
         <translation>ЛОЖЬ</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="159"/>
-        <location filename="filteritemdelegate.cpp" line="369"/>
+        <location filename="filteritemdelegate.cpp" line="170"/>
+        <location filename="filteritemdelegate.cpp" line="416"/>
         <source>TRUE</source>
         <translation>ПРАВДА</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="277"/>
+        <location filename="filteritemdelegate.cpp" line="298"/>
         <source>Filter contains childs.</source>
         <translation>Фильтр содержит подфильтры.</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="278"/>
+        <location filename="filteritemdelegate.cpp" line="299"/>
         <source>Filter contains childs. This operation remove all child of filter. Continue?</source>
         <translation>Фильтр содержит подфильтры. Эта операция удалит все подфильтры данного фильтра. Продолжить?</translation>
     </message>
@@ -280,82 +339,105 @@
 <context>
     <name>FiltersWidget</name>
     <message>
-        <location filename="filterswidget.cpp" line="64"/>
+        <location filename="filterswidget.cpp" line="69"/>
         <source>Search without filters?</source>
         <translation>Искать без фильтров?</translation>
     </message>
     <message>
-        <location filename="filterswidget.cpp" line="65"/>
+        <location filename="filterswidget.cpp" line="70"/>
         <source>Search without filters can take a very long time. Continue?</source>
         <translation>Поиск без фильтров может занять очень длинное время. Продолжить?</translation>
     </message>
     <message>
-        <location filename="filterswidget.cpp" line="85"/>
+        <location filename="filterswidget.cpp" line="90"/>
         <source>Clear all filters?</source>
         <translation>Удалить все фильтры?</translation>
     </message>
     <message>
-        <location filename="filterswidget.cpp" line="86"/>
+        <location filename="filterswidget.cpp" line="91"/>
         <source>This operation clear root filter and remove all child filter. Continue?</source>
         <translation>Эта операция удалит все фильтры. Продолжить?</translation>
     </message>
     <message>
-        <location filename="filterswidget.cpp" line="96"/>
+        <location filename="filterswidget.cpp" line="101"/>
         <source>Error on open file &quot;%0&quot; for write.</source>
         <translation>Ошибка открытия файла &quot;%0&quot; для записи.</translation>
     </message>
     <message>
-        <location filename="filterswidget.cpp" line="116"/>
+        <location filename="filterswidget.cpp" line="121"/>
         <source>Error on open file &quot;%0&quot; for read.</source>
         <translation>Ошибка открытия файла &quot;%0&quot; для чтения.</translation>
     </message>
     <message>
-        <location filename="filterswidget.cpp" line="125"/>
+        <location filename="filterswidget.cpp" line="130"/>
         <source>Error on load json from &quot;%0&quot;. Error: %1.</source>
         <oldsource>Error on load json from &quot;0&quot;. Error: %1.</oldsource>
         <translation>Ошибка загрузки JSON из &quot;%0&quot;. Ошибка: %1.</translation>
     </message>
     <message>
-        <location filename="filterswidget.cpp" line="132"/>
+        <location filename="filterswidget.cpp" line="137"/>
         <source>Invalid json in file &quot;%0&quot;.</source>
         <translation>Неформатный JSON в файле &quot;%0&quot;.</translation>
     </message>
     <message>
-        <location filename="filterswidget.cpp" line="308"/>
+        <location filename="filterswidget.cpp" line="181"/>
+        <source>Error on addresses</source>
+        <translation>Ошибка в адресе</translation>
+    </message>
+    <message>
+        <location filename="filterswidget.cpp" line="182"/>
+        <source>Error on addresses in &quot;%0&quot; condition: %1.
+Address must be 8 litter.</source>
+        <translation>Ошибка в условии &quot;%0&quot; в следующих адресах: %1.
+Каждый адрес должен состоять из 8 символов. </translation>
+    </message>
+    <message>
+        <location filename="filterswidget.cpp" line="184"/>
+        <source>Cc</source>
+        <translation>Копии</translation>
+    </message>
+    <message>
+        <location filename="filterswidget.cpp" line="184"/>
+        <source>Addresses</source>
+        <translation>Адресаты</translation>
+    </message>
+    <message>
+        <location filename="filterswidget.cpp" line="361"/>
         <source>Error to save filter value to Json.</source>
         <oldsource>Error to save filter value to Json</oldsource>
         <translation>Ошибка сохранения фильтра в JSON.</translation>
     </message>
     <message>
-        <location filename="filterswidget.cpp" line="376"/>
+        <location filename="filterswidget.cpp" line="429"/>
         <source>Unknown property &quot;%0&quot;.</source>
         <translation>Неизвестное свойство &quot;%0&quot;.</translation>
     </message>
     <message>
-        <location filename="filterswidget.cpp" line="402"/>
+        <location filename="filterswidget.cpp" line="457"/>
         <source>Unknown operation &quot;%0&quot;.</source>
         <translation>Неизвестное условие &quot;%0&quot;.</translation>
     </message>
     <message>
-        <location filename="filterswidget.cpp" line="418"/>
+        <location filename="filterswidget.cpp" line="477"/>
+        <location filename="filterswidget.cpp" line="485"/>
         <source>Unknown value.</source>
         <oldsource>Unknown value</oldsource>
         <translation>Неизвестное значение.</translation>
     </message>
     <message>
-        <location filename="filterswidget.cpp" line="450"/>
-        <location filename="filterswidget.cpp" line="463"/>
+        <location filename="filterswidget.cpp" line="517"/>
+        <location filename="filterswidget.cpp" line="530"/>
         <source>Child is not object.</source>
         <oldsource>Child is not object</oldsource>
         <translation>Структура в childs не объект.</translation>
     </message>
     <message>
-        <location filename="filterswidget.cpp" line="506"/>
+        <location filename="filterswidget.cpp" line="573"/>
         <source>Last filters saved to &quot;%0&quot;.</source>
         <translation>Текущий фильтр сохранен в &quot;%0&quot;.</translation>
     </message>
     <message>
-        <location filename="filterswidget.cpp" line="509"/>
+        <location filename="filterswidget.cpp" line="576"/>
         <source>Enable to create &quot;%0&quot; dir.</source>
         <translation>Невозможно создать папку &quot;%0&quot;.</translation>
     </message>
@@ -571,42 +653,47 @@
 <context>
     <name>ResultWidget</name>
     <message>
-        <location filename="resultwidget.cpp" line="12"/>
+        <location filename="resultwidget.cpp" line="13"/>
         <source>ID</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="resultwidget.cpp" line="13"/>
+        <location filename="resultwidget.cpp" line="14"/>
         <source>Archive Date And Time</source>
         <translation>Дата И Время Архивации</translation>
     </message>
     <message>
-        <location filename="resultwidget.cpp" line="14"/>
+        <location filename="resultwidget.cpp" line="15"/>
         <source>Channel Name</source>
         <translation>Имя Канала</translation>
     </message>
     <message>
-        <location filename="resultwidget.cpp" line="15"/>
+        <location filename="resultwidget.cpp" line="16"/>
         <source>Channel Number</source>
         <translation>Номер Канала</translation>
     </message>
     <message>
-        <location filename="resultwidget.cpp" line="16"/>
+        <location filename="resultwidget.cpp" line="17"/>
         <source>Header Additional Info</source>
         <translation>Доп. Информация Заголовка</translation>
     </message>
     <message>
-        <location filename="resultwidget.cpp" line="17"/>
+        <location filename="resultwidget.cpp" line="18"/>
         <source>Addresses</source>
         <translation>Адресаты</translation>
     </message>
     <message>
-        <location filename="resultwidget.cpp" line="18"/>
+        <location filename="resultwidget.cpp" line="19"/>
+        <source>Copies</source>
+        <translation>Копии</translation>
+    </message>
+    <message>
+        <location filename="resultwidget.cpp" line="20"/>
         <source>Sender</source>
         <translation>Отправитель</translation>
     </message>
     <message>
-        <location filename="resultwidget.cpp" line="19"/>
+        <location filename="resultwidget.cpp" line="21"/>
         <source>Text</source>
         <translation>Тест</translation>
     </message>
@@ -725,6 +812,14 @@ Error : %3
         <location filename="sqltracelogsyntaxhighliter.cpp" line="39"/>
         <source>\bError\b</source>
         <translation>\bОшибка\b</translation>
+    </message>
+</context>
+<context>
+    <name>StringListDelegateWidget</name>
+    <message>
+        <location filename="stringlistdelegatewidget.cpp" line="62"/>
+        <source>\s*([a-z]{0,8}\s*,\s*)*[a-z]{0,8}\s*</source>
+        <translation>\s*([а-я]{0,8}\s*,\s*)*[а-я]{0,8}\s*</translation>
     </message>
 </context>
 </TS>

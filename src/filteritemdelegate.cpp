@@ -9,6 +9,7 @@
 #include <QDebug>
 #include <QMessageBox>
 #include <QLineEdit>
+#include "stringlistdelegatewidget.h"
 
 FilterItemDelegate::FilterItemDelegate(QObject *parent) :
     QStyledItemDelegate(parent),
@@ -170,6 +171,11 @@ QWidget *FilterItemDelegate::createEditor(QWidget *parent, const QStyleOptionVie
             return createComboBox(boolValues, false);
             break;
         }
+        case QMetaType::QStringList: {
+            StringListDelegateWidget *widget = new StringListDelegateWidget(parent);
+            return widget;
+            break;
+        }
         default:
             return QStyledItemDelegate::createEditor(parent, option, index);
             break;
@@ -199,6 +205,7 @@ void FilterItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index
     }
     case FiltersModel::ValueColumn: {
         QComboBox *comboBox = dynamic_cast<QComboBox *>(editor);
+        StringListDelegateWidget *stringListDelegate = dynamic_cast<StringListDelegateWidget *>(editor);
         if (comboBox) {
             FilterItem *item = static_cast<FilterItem *>(index.internalPointer());
             Q_CHECK_PTR(item);
@@ -219,6 +226,10 @@ void FilterItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index
             Q_ASSERT(valueRow != -1);
             comboBox->setCurrentIndex(valueRow);
             break;
+        } else if (stringListDelegate) {
+            FilterItem *item = static_cast<FilterItem *>(index.internalPointer());
+            Q_CHECK_PTR(item);
+            stringListDelegate->setValue(item->value().toStringList());
         } else
             QStyledItemDelegate::setEditorData(editor, index);
     }
@@ -239,7 +250,8 @@ void FilterItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptio
         Q_CHECK_PTR(item);
         switch (item->propertyType()) {
         case QMetaType::QDateTime:
-        case QMetaType::Int: {
+        case QMetaType::Int:
+        case QMetaType::QStringList: {
             editor->setGeometry(option.rect);
             break;
         }
@@ -296,7 +308,6 @@ void FilterItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model
     case FiltersModel::ValueColumn: {
         FilterItem *item = static_cast<FilterItem *>(index.internalPointer());
         Q_CHECK_PTR(item);
-        qDebug() << item->propertyType();
         switch (item->propertyType()) {
         case QMetaType::Bool: {
             QComboBox *comboBox = static_cast<QComboBox*>(editor);
@@ -305,8 +316,8 @@ void FilterItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model
             break;
         }
         case QMetaType::QStringList: {
-            QLineEdit *lineEdit = static_cast<QLineEdit *>(editor);
-            QStringList value = lineEdit->text().split(',');
+            StringListDelegateWidget *lineEdit = static_cast<StringListDelegateWidget *>(editor);
+            QStringList value = lineEdit->value();
             model->setData(index, value, Qt::EditRole);
             break;
         }

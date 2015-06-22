@@ -11,5 +11,9 @@
         <file>icons/magnifier.png</file>
         <file>icons/calendar.png</file>
         <file>icons/ic_receipt_black_48dp.png</file>
+        <file>icons/minus.png</file>
+        <file>icons/plus.png</file>
+        <file>icons/arrow-090.png</file>
+        <file>icons/arrow-270.png</file>
     </qresource>
 </RCC>

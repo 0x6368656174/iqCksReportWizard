@@ -58,7 +58,12 @@ void FiltersWidget::setMainWindow(QMainWindow *mainWindow)
 void FiltersWidget::find() const
 {
     Q_CHECK_PTR(m_findModel);
-    IqOrmAbstractFilter *rootFilter = createFilter(m_filtersModel->rootFilter());
+    bool abort = false;
+    IqOrmAbstractFilter *rootFilter = createFilter(m_filtersModel->rootFilter(),
+                                                   &abort);
+    if (abort)
+        return;
+
     if (!rootFilter) {
         if(QMessageBox::question(m_mainWindow,
                                  tr("Search without filters?"),
@@ -145,10 +150,11 @@ bool FiltersWidget::load(const QString &fileName) const
     return true;
 }
 
-IqOrmAbstractFilter *FiltersWidget::createFilter(const FilterItem *filterItem) const
+IqOrmAbstractFilter *FiltersWidget::createFilter(const FilterItem *filterItem, bool *abort) const
 {
     Q_CHECK_PTR(filterItem);
     IqOrmAbstractFilter *filter = Q_NULLPTR;
+
 
     switch (filterItem->type()) {
     case FilterItem::NotSetType:
@@ -158,6 +164,29 @@ IqOrmAbstractFilter *FiltersWidget::createFilter(const FilterItem *filterItem) c
             break;
         if (filterItem->operation() == FilterItem::NotSetOperation)
             break;
+
+        if (filterItem->property() == FilterItem::Cc
+                || filterItem->property() == FilterItem::Addresses) {
+            QStringList errorAddresses;
+            bool findErrorAddresses = false;
+            foreach (const QString &string, filterItem->value().toStringList()) {
+                if(string.length() < 8) {
+                    findErrorAddresses = true;
+                    errorAddresses << "<span style=\"color: red\">" + string + "</span>";
+                } else
+                    errorAddresses << string;
+            }
+            if (findErrorAddresses) {
+                QMessageBox::warning(m_mainWindow,
+                                     tr("Error on addresses"),
+                                     tr("Error on addresses in \"%0\" condition: %1.\n"
+                                        "Address must be 8 litter.")
+                                     .arg(filterItem->property() == FilterItem::Cc?tr("Cc"):tr("Addresses"))
+                                     .arg(errorAddresses.join(", ")));
+                *abort = true;
+                return Q_NULLPTR;
+            }
+        }
 
         IqOrmFilter *resultFilter = new IqOrmFilter();
 
@@ -212,7 +241,13 @@ IqOrmAbstractFilter *FiltersWidget::createFilter(const FilterItem *filterItem) c
         IqOrmAndGroupFilter *resultFilter = new IqOrmAndGroupFilter();
 
         foreach (const FilterItem *childFilter, filterItem->childFilters()) {
-            IqOrmAbstractFilter *childResultFilter = createFilter(childFilter);
+            bool childAbbort = false;
+            IqOrmAbstractFilter *childResultFilter = createFilter(childFilter, &childAbbort);
+            if (childAbbort) {
+                resultFilter->deleteLater();
+                *abort = true;
+                return Q_NULLPTR;
+            }
             if (childResultFilter)
                 resultFilter->add(childResultFilter);
         }
@@ -227,7 +262,13 @@ IqOrmAbstractFilter *FiltersWidget::createFilter(const FilterItem *filterItem) c
         IqOrmOrGroupFilter *resultFilter = new IqOrmOrGroupFilter();
 
         foreach (const FilterItem *childFilter, filterItem->childFilters()) {
-            IqOrmAbstractFilter *childResultFilter = createFilter(childFilter);
+            bool childAbbort = false;
+            IqOrmAbstractFilter *childResultFilter = createFilter(childFilter, &childAbbort);
+            if (childAbbort) {
+                resultFilter->deleteLater();
+                *abort = true;
+                return Q_NULLPTR;
+            }
             if (childResultFilter)
                 resultFilter->add(childResultFilter);
         }
