@@ -18,7 +18,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow),
     m_sqlLogDialog(new SqlLogDialog(this)),
     m_logDialog(new LogDialog(this)),
-    m_splitter(new QSplitter(this))
+    m_splitter(new QSplitter(this)),
+    m_reportDialog(new ReportDialog(this))
 {
     ui->setupUi(this);
     QSettings settings;
@@ -69,10 +70,15 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionAbout, &QAction::triggered,
             this, &MainWindow::showAbout);
 
+    connect(ui->actionCreateReport, &QAction::triggered,
+            m_reportDialog, &ReportDialog::show);
+
     m_splitter->setOrientation(Qt::Vertical);
     m_splitter->addWidget(ui->filtersWidget);
     m_splitter->addWidget(ui->resultWidget);
     ui->mainLayout->insertWidget(0, m_splitter);
+
+    m_reportDialog->setMainWindow(this);
 
     loadSettings();
 }
@@ -128,6 +134,8 @@ void MainWindow::openFilters()
     QSettings settins;
     QString openDir = settins.value("lastOpenFiltersDir").toString();
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open filtes"), openDir, tr("JSON Filters (*.json)"));
+    if (fileName.isEmpty())
+        return;
     QFileInfo fileInfo (fileName);
     settins.setValue("lastOpenFiltersDir", fileInfo.path());
 
@@ -139,7 +147,9 @@ void MainWindow::saveFilters()
 {
     QSettings settins;
     QString openDir = settins.value("lastOpenFiltersDir").toString();
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save filtes"), openDir, "JSON Filters (*.json)");
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save filtes"), openDir, tr("JSON Filters (*.json)"));
+    if (fileName.isEmpty())
+        return;
     QFileInfo fileInfo (fileName);
     settins.setValue("lastOpenFiltersDir", fileInfo.path());
 

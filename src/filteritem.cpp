@@ -6,6 +6,7 @@ FilterItem::FilterItem(FilterItem *parent):
     m_property(NotSetPorperty),
     m_operation(NotSetOperation),
     m_value(QVariant()),
+    m_reportTemplate(NotSetTemplate),
     m_caseSensitivity(Qt::CaseSensitive),
     m_inverted(false)
 {
@@ -201,5 +202,16 @@ void FilterItem::setInverted(bool invert)
 {
     m_inverted = invert;
 }
+
+FilterItem::ReportTemplate FilterItem::reportTemplate() const
+{
+    return m_reportTemplate;
+}
+
+void FilterItem::setReportTemplate(ReportTemplate reportTemplate)
+{
+    m_reportTemplate = reportTemplate;
+}
+
 
 

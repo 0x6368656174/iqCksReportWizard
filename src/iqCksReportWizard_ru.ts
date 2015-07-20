@@ -104,6 +104,7 @@
     <message>
         <location filename="filteritemdelegate.cpp" line="18"/>
         <location filename="filteritemdelegate.cpp" line="61"/>
+        <location filename="filteritemdelegate.cpp" line="81"/>
         <source>Not set</source>
         <translation>НЕТ</translation>
     </message>
@@ -189,7 +190,7 @@
     <message>
         <location filename="filteritemdelegate.cpp" line="67"/>
         <source>Cc</source>
-        <translation></translation>
+        <translation>Копии</translation>
     </message>
     <message>
         <location filename="filteritemdelegate.cpp" line="68"/>
@@ -219,7 +220,7 @@
     <message>
         <location filename="filteritemdelegate.cpp" line="63"/>
         <source>Number</source>
-        <translation>Номер канала</translation>
+        <translation>Канальный номер</translation>
     </message>
     <message>
         <location filename="filteritemdelegate.cpp" line="64"/>
@@ -275,30 +276,40 @@
         <translation>Тип сообщения</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="95"/>
-        <location filename="filteritemdelegate.cpp" line="349"/>
+        <location filename="filteritemdelegate.cpp" line="82"/>
+        <source>Start date time</source>
+        <translation>Начальная дата и время</translation>
+    </message>
+    <message>
+        <location filename="filteritemdelegate.cpp" line="83"/>
+        <source>End date time</source>
+        <translation>Конечная дата и время</translation>
+    </message>
+    <message>
+        <location filename="filteritemdelegate.cpp" line="99"/>
+        <location filename="filteritemdelegate.cpp" line="363"/>
         <source>NOT %0</source>
         <translation>НЕ %0</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="169"/>
-        <location filename="filteritemdelegate.cpp" line="416"/>
+        <location filename="filteritemdelegate.cpp" line="173"/>
+        <location filename="filteritemdelegate.cpp" line="430"/>
         <source>FALSE</source>
         <translation>ЛОЖЬ</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="170"/>
-        <location filename="filteritemdelegate.cpp" line="416"/>
+        <location filename="filteritemdelegate.cpp" line="174"/>
+        <location filename="filteritemdelegate.cpp" line="430"/>
         <source>TRUE</source>
         <translation>ПРАВДА</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="298"/>
+        <location filename="filteritemdelegate.cpp" line="312"/>
         <source>Filter contains childs.</source>
         <translation>Фильтр содержит подфильтры.</translation>
     </message>
     <message>
-        <location filename="filteritemdelegate.cpp" line="299"/>
+        <location filename="filteritemdelegate.cpp" line="313"/>
         <source>Filter contains childs. This operation remove all child of filter. Continue?</source>
         <translation>Фильтр содержит подфильтры. Эта операция удалит все подфильтры данного фильтра. Продолжить?</translation>
     </message>
@@ -306,138 +317,202 @@
 <context>
     <name>FiltersModel</name>
     <message>
-        <location filename="filtersmodel.cpp" line="167"/>
-        <source>Type</source>
-        <translation>Тип фильтра</translation>
-    </message>
-    <message>
-        <location filename="filtersmodel.cpp" line="170"/>
-        <source>Property</source>
-        <translation>Свойство</translation>
-    </message>
-    <message>
-        <location filename="filtersmodel.cpp" line="173"/>
-        <source>Operation</source>
-        <translation>Условие</translation>
-    </message>
-    <message>
-        <location filename="filtersmodel.cpp" line="176"/>
-        <source>Value</source>
-        <translation>Значение</translation>
-    </message>
-    <message>
-        <location filename="filtersmodel.cpp" line="179"/>
-        <source>Inverted</source>
-        <translation>Обратное</translation>
-    </message>
-    <message>
-        <location filename="filtersmodel.cpp" line="182"/>
-        <source>Case Sensitive</source>
-        <translation>Чувствительно к регистру</translation>
-    </message>
-</context>
-<context>
-    <name>FiltersWidget</name>
-    <message>
-        <location filename="filterswidget.cpp" line="69"/>
-        <source>Search without filters?</source>
-        <translation>Искать без фильтров?</translation>
-    </message>
-    <message>
-        <location filename="filterswidget.cpp" line="70"/>
-        <source>Search without filters can take a very long time. Continue?</source>
-        <translation>Поиск без фильтров может занять очень длинное время. Продолжить?</translation>
-    </message>
-    <message>
-        <location filename="filterswidget.cpp" line="90"/>
-        <source>Clear all filters?</source>
-        <translation>Удалить все фильтры?</translation>
-    </message>
-    <message>
-        <location filename="filterswidget.cpp" line="91"/>
-        <source>This operation clear root filter and remove all child filter. Continue?</source>
-        <translation>Эта операция удалит все фильтры. Продолжить?</translation>
-    </message>
-    <message>
-        <location filename="filterswidget.cpp" line="101"/>
-        <source>Error on open file &quot;%0&quot; for write.</source>
-        <translation>Ошибка открытия файла &quot;%0&quot; для записи.</translation>
-    </message>
-    <message>
-        <location filename="filterswidget.cpp" line="121"/>
+        <location filename="filtersmodel.cpp" line="70"/>
         <source>Error on open file &quot;%0&quot; for read.</source>
         <translation>Ошибка открытия файла &quot;%0&quot; для чтения.</translation>
     </message>
     <message>
-        <location filename="filterswidget.cpp" line="130"/>
+        <location filename="filtersmodel.cpp" line="79"/>
         <source>Error on load json from &quot;%0&quot;. Error: %1.</source>
-        <oldsource>Error on load json from &quot;0&quot;. Error: %1.</oldsource>
         <translation>Ошибка загрузки JSON из &quot;%0&quot;. Ошибка: %1.</translation>
     </message>
     <message>
-        <location filename="filterswidget.cpp" line="137"/>
+        <location filename="filtersmodel.cpp" line="86"/>
         <source>Invalid json in file &quot;%0&quot;.</source>
         <translation>Неформатный JSON в файле &quot;%0&quot;.</translation>
     </message>
     <message>
-        <location filename="filterswidget.cpp" line="181"/>
-        <source>Error on addresses</source>
-        <translation>Ошибка в адресе</translation>
+        <location filename="filtersmodel.cpp" line="104"/>
+        <source>Error on open file &quot;%0&quot; for write.</source>
+        <translation>Ошибка открытия файла &quot;%0&quot; для записи.</translation>
     </message>
     <message>
-        <location filename="filterswidget.cpp" line="182"/>
+        <location filename="filtersmodel.cpp" line="151"/>
         <source>Error on addresses in &quot;%0&quot; condition: %1.
 Address must be 8 litter.</source>
         <translation>Ошибка в условии &quot;%0&quot; в следующих адресах: %1.
 Каждый адрес должен состоять из 8 символов. </translation>
     </message>
     <message>
-        <location filename="filterswidget.cpp" line="184"/>
+        <location filename="filtersmodel.cpp" line="153"/>
         <source>Cc</source>
         <translation>Копии</translation>
     </message>
     <message>
-        <location filename="filterswidget.cpp" line="184"/>
+        <location filename="filtersmodel.cpp" line="153"/>
         <source>Addresses</source>
         <translation>Адресаты</translation>
     </message>
     <message>
-        <location filename="filterswidget.cpp" line="361"/>
+        <location filename="filtersmodel.cpp" line="398"/>
+        <source>Type</source>
+        <translation>Тип фильтра</translation>
+    </message>
+    <message>
+        <location filename="filtersmodel.cpp" line="401"/>
+        <source>Property</source>
+        <translation>Свойство</translation>
+    </message>
+    <message>
+        <location filename="filtersmodel.cpp" line="404"/>
+        <source>Operation</source>
+        <translation>Условие</translation>
+    </message>
+    <message>
+        <location filename="filtersmodel.cpp" line="407"/>
+        <source>Value</source>
+        <translation>Значение</translation>
+    </message>
+    <message>
+        <location filename="filtersmodel.cpp" line="410"/>
+        <source>Report Template</source>
+        <translation>Шаблон Отчета</translation>
+    </message>
+    <message>
+        <location filename="filtersmodel.cpp" line="413"/>
+        <source>Inverted</source>
+        <translation>Обратное</translation>
+    </message>
+    <message>
+        <location filename="filtersmodel.cpp" line="416"/>
+        <source>Case Sensitive</source>
+        <translation>Чувствительно к регистру</translation>
+    </message>
+    <message>
+        <location filename="filtersmodel.cpp" line="553"/>
         <source>Error to save filter value to Json.</source>
-        <oldsource>Error to save filter value to Json</oldsource>
         <translation>Ошибка сохранения фильтра в JSON.</translation>
     </message>
     <message>
-        <location filename="filterswidget.cpp" line="429"/>
+        <location filename="filtersmodel.cpp" line="631"/>
         <source>Unknown property &quot;%0&quot;.</source>
         <translation>Неизвестное свойство &quot;%0&quot;.</translation>
     </message>
     <message>
-        <location filename="filterswidget.cpp" line="457"/>
+        <location filename="filtersmodel.cpp" line="652"/>
         <source>Unknown operation &quot;%0&quot;.</source>
         <translation>Неизвестное условие &quot;%0&quot;.</translation>
     </message>
     <message>
-        <location filename="filterswidget.cpp" line="477"/>
-        <location filename="filterswidget.cpp" line="485"/>
+        <location filename="filtersmodel.cpp" line="672"/>
+        <location filename="filtersmodel.cpp" line="680"/>
         <source>Unknown value.</source>
-        <oldsource>Unknown value</oldsource>
         <translation>Неизвестное значение.</translation>
     </message>
     <message>
-        <location filename="filterswidget.cpp" line="517"/>
-        <location filename="filterswidget.cpp" line="530"/>
-        <source>Child is not object.</source>
-        <oldsource>Child is not object</oldsource>
-        <translation>Структура в childs не объект.</translation>
+        <location filename="filtersmodel.cpp" line="699"/>
+        <source>Unknown report template &quot;%0&quot;.</source>
+        <translation>Неизвестный шаблон отчета &quot;%0&quot;.</translation>
     </message>
     <message>
-        <location filename="filterswidget.cpp" line="573"/>
+        <location filename="filtersmodel.cpp" line="732"/>
+        <location filename="filtersmodel.cpp" line="745"/>
+        <source>Child is not object.</source>
+        <translation>Структура в childs не объект.</translation>
+    </message>
+</context>
+<context>
+    <name>FiltersWidget</name>
+    <message>
+        <location filename="filterswidget.cpp" line="40"/>
+        <source>Error on create filters</source>
+        <translation>Ошибка при создании фильтров</translation>
+    </message>
+    <message>
+        <location filename="filterswidget.cpp" line="47"/>
+        <source>Search without filters?</source>
+        <translation>Искать без фильтров?</translation>
+    </message>
+    <message>
+        <location filename="filterswidget.cpp" line="48"/>
+        <source>Search without filters can take a very long time. Continue?</source>
+        <translation>Поиск без фильтров может занять очень длинное время. Продолжить?</translation>
+    </message>
+    <message>
+        <location filename="filterswidget.cpp" line="68"/>
+        <source>Clear all filters?</source>
+        <translation>Удалить все фильтры?</translation>
+    </message>
+    <message>
+        <location filename="filterswidget.cpp" line="69"/>
+        <source>This operation clear root filter and remove all child filter. Continue?</source>
+        <translation>Эта операция удалит все фильтры. Продолжить?</translation>
+    </message>
+    <message>
+        <source>Error on open file &quot;%0&quot; for write.</source>
+        <translation type="obsolete">Ошибка открытия файла &quot;%0&quot; для записи.</translation>
+    </message>
+    <message>
+        <source>Error on open file &quot;%0&quot; for read.</source>
+        <translation type="obsolete">Ошибка открытия файла &quot;%0&quot; для чтения.</translation>
+    </message>
+    <message>
+        <source>Error on load json from &quot;%0&quot;. Error: %1.</source>
+        <oldsource>Error on load json from &quot;0&quot;. Error: %1.</oldsource>
+        <translation type="obsolete">Ошибка загрузки JSON из &quot;%0&quot;. Ошибка: %1.</translation>
+    </message>
+    <message>
+        <source>Invalid json in file &quot;%0&quot;.</source>
+        <translation type="obsolete">Неформатный JSON в файле &quot;%0&quot;.</translation>
+    </message>
+    <message>
+        <source>Error on addresses</source>
+        <translation type="obsolete">Ошибка в адресе</translation>
+    </message>
+    <message>
+        <source>Error on addresses in &quot;%0&quot; condition: %1.
+Address must be 8 litter.</source>
+        <translation type="obsolete">Ошибка в условии &quot;%0&quot; в следующих адресах: %1.
+Каждый адрес должен состоять из 8 символов. </translation>
+    </message>
+    <message>
+        <source>Cc</source>
+        <translation type="obsolete">Копии</translation>
+    </message>
+    <message>
+        <source>Addresses</source>
+        <translation type="obsolete">Адресаты</translation>
+    </message>
+    <message>
+        <source>Error to save filter value to Json.</source>
+        <oldsource>Error to save filter value to Json</oldsource>
+        <translation type="obsolete">Ошибка сохранения фильтра в JSON.</translation>
+    </message>
+    <message>
+        <source>Unknown property &quot;%0&quot;.</source>
+        <translation type="obsolete">Неизвестное свойство &quot;%0&quot;.</translation>
+    </message>
+    <message>
+        <source>Unknown operation &quot;%0&quot;.</source>
+        <translation type="obsolete">Неизвестное условие &quot;%0&quot;.</translation>
+    </message>
+    <message>
+        <source>Unknown value.</source>
+        <oldsource>Unknown value</oldsource>
+        <translation type="obsolete">Неизвестное значение.</translation>
+    </message>
+    <message>
+        <source>Child is not object.</source>
+        <oldsource>Child is not object</oldsource>
+        <translation type="obsolete">Структура в childs не объект.</translation>
+    </message>
+    <message>
+        <location filename="filterswidget.cpp" line="124"/>
         <source>Last filters saved to &quot;%0&quot;.</source>
         <translation>Текущий фильтр сохранен в &quot;%0&quot;.</translation>
     </message>
     <message>
-        <location filename="filterswidget.cpp" line="576"/>
+        <location filename="filterswidget.cpp" line="127"/>
         <source>Enable to create &quot;%0&quot; dir.</source>
         <translation>Невозможно создать папку &quot;%0&quot;.</translation>
     </message>
@@ -468,12 +543,12 @@ Address must be 8 litter.</source>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="mainwindow.cpp" line="123"/>
+        <location filename="mainwindow.cpp" line="129"/>
         <source>IqCksReportWizard about</source>
         <translation>О программе</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="123"/>
+        <location filename="mainwindow.cpp" line="129"/>
         <source>This is very good app.</source>
         <translation>IqCksReportWizard - кросплатформенное приложение для генерации отчетов ЦКС.
 
@@ -482,17 +557,18 @@ Address must be 8 litter.</source>
 Автор: Группа Систем и Средств УВД Хабаровской Базовой Службы ЭРТОС, Пучков П.А.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="130"/>
+        <location filename="mainwindow.cpp" line="136"/>
         <source>Open filtes</source>
         <translation>Открыть фильтры</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="130"/>
+        <location filename="mainwindow.cpp" line="136"/>
+        <location filename="mainwindow.cpp" line="150"/>
         <source>JSON Filters (*.json)</source>
         <translation>JSON Фильтры (*.json)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="142"/>
+        <location filename="mainwindow.cpp" line="150"/>
         <source>Save filtes</source>
         <translation>Сохранить фильтры</translation>
     </message>
@@ -527,102 +603,120 @@ Address must be 8 litter.</source>
         <translation>Ф&amp;ильтры</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="113"/>
+        <location filename="mainwindow.ui" line="103"/>
+        <source>&amp;Reports</source>
+        <translation>&amp;Отчеты</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="120"/>
         <source>&amp;About</source>
         <translation>&amp;О программе</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="116"/>
+        <location filename="mainwindow.ui" line="123"/>
         <source>Show about dialog</source>
         <translation>Показать диалог &quot;О программе&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="125"/>
+        <location filename="mainwindow.ui" line="132"/>
         <source>&amp;Close</source>
         <translation>&amp;Закрыть</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="128"/>
+        <location filename="mainwindow.ui" line="135"/>
         <source>Ctrl+Q</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="137"/>
+        <location filename="mainwindow.ui" line="144"/>
         <source>&amp;Settings</source>
         <translation>&amp;Настройки</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="146"/>
+        <location filename="mainwindow.ui" line="153"/>
         <source>SQL &amp;Log</source>
         <translation>SQL &amp;Лог</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="155"/>
+        <location filename="mainwindow.ui" line="162"/>
         <source>About &amp;Qt</source>
         <translation>О &amp;Qt</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="158"/>
+        <location filename="mainwindow.ui" line="165"/>
         <source>Show about Qt dialog</source>
         <translation>Показать диалог &quot;О Qt&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="167"/>
+        <location filename="mainwindow.ui" line="174"/>
         <source>&amp;Find</source>
         <translation>&amp;Найти</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="170"/>
+        <location filename="mainwindow.ui" line="177"/>
         <source>Ctrl+F</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="179"/>
+        <location filename="mainwindow.ui" line="186"/>
         <source>&amp;Clear</source>
         <translation>Отчи&amp;стить</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="188"/>
+        <location filename="mainwindow.ui" line="195"/>
         <source>&amp;Open</source>
         <translation>&amp;Открыть</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="191"/>
+        <location filename="mainwindow.ui" line="198"/>
         <source>Ctrl+O</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="200"/>
+        <location filename="mainwindow.ui" line="207"/>
         <source>&amp;Save</source>
         <translation>&amp;Сохранить</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="203"/>
+        <location filename="mainwindow.ui" line="210"/>
         <source>Ctrl+S</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="212"/>
+        <location filename="mainwindow.ui" line="219"/>
         <source>Main Log</source>
+        <oldsource>&amp;Main Log</oldsource>
         <translation>Общий Лог</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="217"/>
+        <location filename="mainwindow.ui" line="224"/>
         <source>Expand All</source>
-        <translation>Развернуть Все</translation>
+        <oldsource>&amp;Expand All</oldsource>
+        <translation>Развернуть все</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="220"/>
+        <location filename="mainwindow.ui" line="232"/>
+        <source>Collapse All</source>
+        <oldsource>Collapse &amp;All</oldsource>
+        <translation>Свернуть Все</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="244"/>
+        <source>Report Wisard</source>
+        <translation>Мастер Отчетов</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="247"/>
+        <source>Show report wisard</source>
+        <translation>Показать мастер шаблонов</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="227"/>
         <source>Expand all filters</source>
         <translation>Развернуть все фильтры</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="225"/>
-        <source>Collapse All</source>
-        <translation>Свернуть Все</translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="228"/>
+        <location filename="mainwindow.ui" line="235"/>
         <source>Collapse all filters</source>
         <translation>Свернуть все фильтры</translation>
     </message>
@@ -651,49 +745,247 @@ Address must be 8 litter.</source>
     </message>
 </context>
 <context>
+    <name>ReportDialog</name>
+    <message>
+        <location filename="reportdialog.ui" line="14"/>
+        <source>Report Wisard</source>
+        <translation>Мастер Отчетов</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.ui" line="21"/>
+        <source>Templates</source>
+        <translation>Шаблоны</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.ui" line="29"/>
+        <source>Start Date Time:</source>
+        <translation>Начальная Дата И Время:</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.ui" line="36"/>
+        <location filename="reportdialog.ui" line="53"/>
+        <source>dd.MM.yyyy hh:mm:ss</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="reportdialog.ui" line="46"/>
+        <source>End Date Time:</source>
+        <translation>Конечная Дата И Время:</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.ui" line="98"/>
+        <source>&amp;File</source>
+        <translation>&amp;Файл</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.ui" line="109"/>
+        <source>&amp;Report</source>
+        <translation>&amp;Отчеты</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.ui" line="125"/>
+        <source>File</source>
+        <translation>Файл</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.ui" line="139"/>
+        <source>Report</source>
+        <translation>Отчеты</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.ui" line="161"/>
+        <source>&amp;Open</source>
+        <translation>&amp;Открыть Шаблон</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.ui" line="170"/>
+        <source>&amp;Save</source>
+        <translation>&amp;Сохранить Шаблон</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.ui" line="179"/>
+        <source>Create Report</source>
+        <oldsource>Cre&amp;ate Report</oldsource>
+        <translation>Создать Отчет</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.ui" line="188"/>
+        <location filename="reportdialog.ui" line="191"/>
+        <source>Insert Row</source>
+        <oldsource>I&amp;nsert Row</oldsource>
+        <translation>Вставить Строку</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.ui" line="215"/>
+        <source>Remove Row</source>
+        <oldsource>&amp;Remove Row</oldsource>
+        <translation>Удалить Строку</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.ui" line="227"/>
+        <source>Remove Column</source>
+        <oldsource>R&amp;emove Column</oldsource>
+        <translation>Удалить Столбец</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.ui" line="236"/>
+        <source>Close</source>
+        <oldsource>&amp;Close</oldsource>
+        <translation>Закрыть</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.ui" line="248"/>
+        <source>Choise Filter</source>
+        <oldsource>&amp;Choise Filter</oldsource>
+        <translation>Выбрать Фильтр</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.ui" line="200"/>
+        <location filename="reportdialog.ui" line="203"/>
+        <source>Insert Column</source>
+        <oldsource>&amp;Insert Column</oldsource>
+        <translation>Вставить Столбец</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.cpp" line="178"/>
+        <source>Save report template</source>
+        <translation>Сохранить шаблон отчета</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.cpp" line="195"/>
+        <source>Open report template</source>
+        <translation>Открыть шаблон отчета</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.cpp" line="319"/>
+        <source>JSON Filters (*.json)</source>
+        <translation>JSON Шаблоны отчетов (*.json)</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.cpp" line="214"/>
+        <location filename="reportdialog.cpp" line="374"/>
+        <source>Error on open file &quot;%0&quot; for write.</source>
+        <translation>Ошибка открытия файла &quot;%0&quot; для записи.</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.cpp" line="76"/>
+        <source>Abort</source>
+        <translation>Прервать</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.cpp" line="84"/>
+        <source>Error on create report</source>
+        <translation>Ошибка при создании отчета</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.cpp" line="179"/>
+        <location filename="reportdialog.cpp" line="196"/>
+        <source>JSON Report templates (*.json)</source>
+        <translation>JSON Шаблоны отчетов (*.json)</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.cpp" line="261"/>
+        <source>Error on open file &quot;%0&quot; for read.</source>
+        <translation>Ошибка открытия файла &quot;%0&quot; для чтения.</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.cpp" line="270"/>
+        <source>Error on load json from &quot;%0&quot;. Error: %1.</source>
+        <translation>Ошибка загрузки JSON из &quot;%0&quot;. Ошибка: %1.</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.cpp" line="277"/>
+        <source>Invalid json in file &quot;%0&quot;.</source>
+        <translation>Неформатный JSON в файле &quot;%0&quot;.</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.cpp" line="318"/>
+        <source>Choise filter</source>
+        <translation>Выбор фильтра</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.cpp" line="335"/>
+        <source>Create report</source>
+        <translation>Создать отчет</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.cpp" line="336"/>
+        <source>CSV Reports (*.csv)</source>
+        <translation>CSV Отчеты (*.csv)</translation>
+    </message>
+    <message>
+        <source>Error on load filters</source>
+        <translation type="obsolete">Ошибка загрузки фильтров</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.cpp" line="75"/>
+        <source>Report created...</source>
+        <translation>Создание отчета...</translation>
+    </message>
+    <message>
+        <source>Abort Create</source>
+        <translation type="obsolete">Прервать Создание</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.cpp" line="405"/>
+        <source>Error on load filters from &quot;%0&quot;.</source>
+        <translation>Ошибка загрузки фильтров из &quot;%0&quot;.</translation>
+    </message>
+    <message>
+        <source>Error on create filters</source>
+        <translation type="obsolete">Ошибка при создании фильтров</translation>
+    </message>
+    <message>
+        <location filename="reportdialog.cpp" line="418"/>
+        <source>Error on create filters from &quot;%0&quot;. Error: %1.</source>
+        <translation>Ошибка при создании фильтов из &quot;%0&quot;. Ошибка: &quot;%1&quot;.</translation>
+    </message>
+</context>
+<context>
     <name>ResultWidget</name>
     <message>
-        <location filename="resultwidget.cpp" line="13"/>
+        <location filename="resultwidget.cpp" line="14"/>
         <source>ID</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="resultwidget.cpp" line="14"/>
+        <location filename="resultwidget.cpp" line="15"/>
         <source>Archive Date And Time</source>
-        <translation>Дата И Время Архивации</translation>
+        <translation>Дата И Время</translation>
     </message>
     <message>
-        <location filename="resultwidget.cpp" line="15"/>
+        <location filename="resultwidget.cpp" line="16"/>
         <source>Channel Name</source>
         <translation>Имя Канала</translation>
     </message>
     <message>
-        <location filename="resultwidget.cpp" line="16"/>
-        <source>Channel Number</source>
-        <translation>Номер Канала</translation>
-    </message>
-    <message>
         <location filename="resultwidget.cpp" line="17"/>
-        <source>Header Additional Info</source>
-        <translation>Доп. Информация Заголовка</translation>
+        <source>Channel Number</source>
+        <translation>Канальный Номер</translation>
     </message>
     <message>
         <location filename="resultwidget.cpp" line="18"/>
+        <source>Header Additional Info</source>
+        <translation>Доп. Инф. Заголовка</translation>
+    </message>
+    <message>
+        <location filename="resultwidget.cpp" line="19"/>
         <source>Addresses</source>
         <translation>Адресаты</translation>
     </message>
     <message>
-        <location filename="resultwidget.cpp" line="19"/>
+        <location filename="resultwidget.cpp" line="20"/>
         <source>Copies</source>
         <translation>Копии</translation>
     </message>
     <message>
-        <location filename="resultwidget.cpp" line="20"/>
+        <location filename="resultwidget.cpp" line="21"/>
         <source>Sender</source>
         <translation>Отправитель</translation>
     </message>
     <message>
-        <location filename="resultwidget.cpp" line="21"/>
+        <location filename="resultwidget.ui" line="45"/>
+        <location filename="resultwidget.cpp" line="22"/>
         <source>Text</source>
         <translation>Тест</translation>
     </message>
@@ -706,6 +998,11 @@ Address must be 8 litter.</source>
         <location filename="resultwidget.ui" line="17"/>
         <source>Result</source>
         <translation>Результат</translation>
+    </message>
+    <message>
+        <location filename="resultwidget.ui" line="33"/>
+        <source>Journal</source>
+        <translation>Журнал</translation>
     </message>
 </context>
 <context>

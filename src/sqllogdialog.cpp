@@ -52,7 +52,7 @@ void SqlLogDialog::saveSqlBeginTransactionToTraceLog(bool ok, const QString &err
         logRecord = tr("BEGIN TRANSACTION - Error\nError: %0\n")
                 .arg(error);
 
-    ui->sqlTraceLogTextEdit->append(logRecord);
+    ui->sqlTraceLogTextEdit->append(logRecord.toHtmlEscaped());
 }
 
 void SqlLogDialog::saveSqlCommitTransactionToTraceLog(bool ok,
@@ -67,7 +67,7 @@ void SqlLogDialog::saveSqlCommitTransactionToTraceLog(bool ok,
                 .arg(error);
     logRecord.append("------------------------------------------\n");
 
-    ui->sqlTraceLogTextEdit->append(logRecord);
+    ui->sqlTraceLogTextEdit->append(logRecord.toHtmlEscaped());
 }
 
 void SqlLogDialog::saveSqlRollbackTransactionToTraceLog(bool ok,
@@ -82,7 +82,7 @@ void SqlLogDialog::saveSqlRollbackTransactionToTraceLog(bool ok,
                 .arg(error);
     logRecord.append("------------------------------------------\n");
 
-    ui->sqlTraceLogTextEdit->append(logRecord);
+    ui->sqlTraceLogTextEdit->append(logRecord.toHtmlEscaped());
 }
 
 void SqlLogDialog::saveSqlPrepereQueryToTraceLog(const QString &query,
@@ -102,7 +102,7 @@ void SqlLogDialog::saveSqlPrepereQueryToTraceLog(const QString &query,
                 .arg(elapsed)
                 .arg(error);
 
-    ui->sqlTraceLogTextEdit->append(logRecord);
+    ui->sqlTraceLogTextEdit->append(logRecord.toHtmlEscaped());
 }
 
 void SqlLogDialog::saveSqlExecQueryToTraceLog(const QString &query,
@@ -122,7 +122,7 @@ void SqlLogDialog::saveSqlExecQueryToTraceLog(const QString &query,
                 .arg(elapsed)
                 .arg(error);
 
-    ui->sqlTraceLogTextEdit->append(logRecord);
+    ui->sqlTraceLogTextEdit->append(logRecord.toHtmlEscaped());
 }
 
 void SqlLogDialog::saveSqlExecPreparedQueryToTraceLog(const QVariantList &bindValues,
@@ -151,5 +151,5 @@ void SqlLogDialog::saveSqlExecPreparedQueryToTraceLog(const QVariantList &bindVa
                 .arg(elapsed)
                 .arg(error);
 
-    ui->sqlTraceLogTextEdit->append(logRecord);
+    ui->sqlTraceLogTextEdit->append(logRecord.toHtmlEscaped());
 }

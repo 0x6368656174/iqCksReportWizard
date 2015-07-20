@@ -31,6 +31,7 @@ private:
     QMap<int, QString> m_boolOperationStrings;
     QMap<int, QString> m_stringListOperationStrings;
     QMap<int, QString> m_propertyStrings;
+    QMap<int, QString> m_reportTempateStrings;
     QMainWindow *m_mainWindow;
 };
 

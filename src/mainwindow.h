@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "sqllogdialog.h"
 #include "logdialog.h"
+#include "reportdialog.h"
 #include <QSplitter>
 
 namespace Ui {
@@ -18,6 +19,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+protected:
     virtual void closeEvent(QCloseEvent *event);
 
 private:
@@ -32,6 +34,7 @@ private:
     SqlLogDialog *m_sqlLogDialog;
     LogDialog *m_logDialog;
     QSplitter *m_splitter;
+    ReportDialog *m_reportDialog;
 };
 
 #endif // MAINWINDOW_H

@@ -77,6 +77,10 @@ FilterItemDelegate::FilterItemDelegate(QObject *parent) :
     m_propertyStrings[FilterItem::Svc] = tr("SVC");
     m_propertyStrings[FilterItem::RouteId] = tr("Route ID");
     m_propertyStrings[FilterItem::MessageType] = tr("Message Type");
+
+    m_reportTempateStrings[FilterItem::NotSetTemplate] = tr("Not set");
+    m_reportTempateStrings[FilterItem::StartDateTime] = tr("Start date time");
+    m_reportTempateStrings[FilterItem::EndDateTime] = tr("End date time");
 }
 
 FilterItemDelegate::~FilterItemDelegate()
@@ -153,7 +157,7 @@ QWidget *FilterItemDelegate::createEditor(QWidget *parent, const QStyleOptionVie
         switch (item->propertyType()) {
         case QMetaType::QDateTime: {
             QDateTimeEdit *dateTimeEdit = new QDateTimeEdit(parent);
-            dateTimeEdit->setDisplayFormat("dd.MM.yyyy hh:mm");
+            dateTimeEdit->setDisplayFormat("dd.MM.yyyy hh:mm:ss");
             dateTimeEdit->setCalendarPopup(true);
             return dateTimeEdit;
             break;
@@ -182,6 +186,10 @@ QWidget *FilterItemDelegate::createEditor(QWidget *parent, const QStyleOptionVie
         }
         break;
     }
+    case FiltersModel::ReportTemplateColumn: {
+        return createComboBox(m_reportTempateStrings, false);
+        break;
+    }
     default:
         return QStyledItemDelegate::createEditor(parent, option, index);
         break;
@@ -195,7 +203,8 @@ void FilterItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index
     switch (index.column()) {
     case FiltersModel::TypeColumn:
     case FiltersModel::OperationColumn:
-    case FiltersModel::PropertyColumn: {
+    case FiltersModel::PropertyColumn:
+    case FiltersModel::ReportTemplateColumn: {
         int value = index.model()->data(index, Qt::EditRole).toInt();
 
         QComboBox *comboBox = static_cast<QComboBox*>(editor);
@@ -232,7 +241,11 @@ void FilterItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index
             stringListDelegate->setValue(item->value().toStringList());
         } else
             QStyledItemDelegate::setEditorData(editor, index);
+        break;
     }
+    default:
+            QStyledItemDelegate::setEditorData(editor, index);
+            break;
     }
 }
 
@@ -282,7 +295,8 @@ void FilterItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model
     switch (index.column()) {
     case FiltersModel::TypeColumn:
     case FiltersModel::OperationColumn:
-    case FiltersModel::PropertyColumn: {
+    case FiltersModel::PropertyColumn:
+    case FiltersModel::ReportTemplateColumn: {
         QComboBox *comboBox = static_cast<QComboBox*>(editor);
         int value = comboBox->currentData().toInt();
 
@@ -311,7 +325,7 @@ void FilterItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model
         switch (item->propertyType()) {
         case QMetaType::Bool: {
             QComboBox *comboBox = static_cast<QComboBox*>(editor);
-            int value = comboBox->currentData().toInt();
+            bool value = static_cast<bool>(comboBox->currentData().toInt());
             model->setData(index, value, Qt::EditRole);
             break;
         }
@@ -407,7 +421,7 @@ void FilterItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
         switch (item->propertyType()) {
         case QMetaType::QDateTime: {
             QStyleOptionViewItem valueOption (option);
-            valueOption.text = index.model()->data(index).toDateTime().toString("dd.MM.yyyy hh:mm");
+            valueOption.text = index.model()->data(index).toDateTime().toString("dd.MM.yyyy hh:mm:ss");
             QStyledItemDelegate::paint(painter, valueOption, QModelIndex());
             break;
         }
@@ -429,6 +443,13 @@ void FilterItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
         }
         break;
     }
+    case FiltersModel::ReportTemplateColumn:
+        if (groupType == FilterItem::Condition) {
+            paintComboBox(m_reportTempateStrings, false);
+        } else {
+            QStyledItemDelegate::paint(painter, option, index);
+        }
+        break;
     case FiltersModel::InvertedColumn: {
         FilterItem *item = static_cast<FilterItem *>(index.internalPointer());
         Q_CHECK_PTR(item);

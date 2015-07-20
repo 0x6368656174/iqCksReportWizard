@@ -2,6 +2,7 @@
 #define FILTERSMODEL_H
 
 #include <QAbstractItemModel>
+#include <IqOrmAbstractFilter>
 #include "filteritem.h"
 
 class FiltersModel : public QAbstractItemModel
@@ -12,6 +13,7 @@ public:
         TypeColumn,
         PropertyColumn,
         OperationColumn,
+        ReportTemplateColumn,
         ValueColumn,
         InvertedColumn,
         CaseSensitivityColumn
@@ -19,6 +21,11 @@ public:
 
     explicit FiltersModel(QObject *parent = 0);
     ~FiltersModel();
+
+    bool loadFromFile(const QString &fileName);
+    bool saveToFile(const QString &fileName) const;
+
+    IqOrmAbstractFilter *createFilter(bool *abort, QString *error = Q_NULLPTR) const;
 
     virtual QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role) Q_DECL_OVERRIDE;
@@ -41,9 +48,19 @@ public:
 private:
     QModelIndex indexForFilter(FilterItem *filter);
 
+    IqOrmAbstractFilter *createFilter(const FilterItem *filterItem,
+                                      bool *abort,
+                                      QString *error) const;
+    QJsonObject createFilterJson(const FilterItem *filterItem) const;
+    bool createItemFromJson(const QJsonObject &filterObject,
+                            const QModelIndex &parentIndex);
+
 private:
     FilterItem *m_mainRootFilter;
     FilterItem *m_rootFilter;
+    QHash<FilterItem::Properties, QString> m_propetriesNames;
+    QHash<FilterItem::Operation, QString> m_operationsNames;
+    QHash<FilterItem::ReportTemplate, QString> m_reportTemplateNames;
 };
 
 #endif // FILTERSMODEL_H

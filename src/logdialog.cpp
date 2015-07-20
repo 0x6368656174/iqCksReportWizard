@@ -32,5 +32,5 @@ void LogDialog::addToLog(const QString &message)
 
 void LogDialog::sheldueAddToLog(const QString &message)
 {
-    ui->logTextEdit->append(message);
+    ui->logTextEdit->append(message.toHtmlEscaped());
 }

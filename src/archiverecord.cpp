@@ -2,7 +2,25 @@
 
 ArchiveRecord::ArchiveRecord(QObject *parent) :
     QObject(parent),
-    IqOrmObject()
+    IqOrmObject(),
+    m_channelName(""),
+    m_channelNumber(0),
+    m_headerInfo(""),
+    m_priority(0),
+    m_addresses(QStringList()),
+    m_cc(QStringList()),
+    m_senderTime(""),
+    m_sender(""),
+    m_senderInfo(""),
+    m_text(""),
+    m_dateTime(QDateTime()),
+    m_direction(0),
+    m_channelId(0),
+    m_journal(""),
+    m_serialNumber(0),
+    m_svc(false),
+    m_routeId(0),
+    m_msgType(0)
 {
 }
 
@@ -13,46 +31,24 @@ ArchiveRecord::~ArchiveRecord()
 void ArchiveRecord::initializeOrmMetaModel(IqOrmMetaModel *model) const
 {
     model->setTableName("archive");
-    model->setPropertyColumn("channelName", "channel_name");
-    model->setPropertyColumn("channelNumber", "channel_num");
-    model->setPropertyColumn("headerInfo", "header_info");
-    model->setPropertyColumn("priority");
-    model->setPropertyColumn("addresses");
-    model->setPropertyColumn("cc");
-    model->setPropertyColumn("senderTime", "sender_time");
-    model->setPropertyColumn("sender");
-    model->setPropertyColumn("senderInfo", "sender_info");
-    model->setPropertyColumn("text");
-    model->setPropertyColumn("dateTime", "date_time");
-    model->setPropertyColumn("direction");
-    model->setPropertyColumn("channelId", "channel_id");
-    model->setPropertyColumn("journal");
-    model->setPropertyColumn("serialNumber", "serial_num");
-    model->setPropertyColumn("svc");
-    model->setPropertyColumn("routeId", "route_id");
-    model->setPropertyColumn("msgType", "msg_type");
-}
-
-void ArchiveRecord::reset()
-{
-    setChannelName("");
-    setChannelNumber(0);
-    setHeaderInfo("");
-    setPriority(0);
-    setAddresses(QStringList());
-    setCc(QStringList());
-    setSenderTime("");
-    setSender("");
-    setSenderInfo("");
-    setText("");
-    setDateTime(QDateTime());
-    setDirection(0);
-    setChannelId(0);
-    setJournal("");
-    setSerialNumber(0);
-    setSvc(false);
-    setRouteId(0);
-    setMsgType(0);
+    model->setDirect("channelName", "channel_name");
+    model->setDirect("channelNumber", "channel_num");
+    model->setDirect("headerInfo", "header_info");
+    model->setDirect("priority");
+    model->setDirect("addresses");
+    model->setDirect("cc");
+    model->setDirect("senderTime", "sender_time");
+    model->setDirect("sender");
+    model->setDirect("senderInfo", "sender_info");
+    model->setDirect("text");
+    model->setDirect("dateTime", "date_time");
+    model->setDirect("direction");
+    model->setDirect("channelId", "channel_id");
+    model->setDirect("journal");
+    model->setDirect("serialNumber", "serial_num");
+    model->setDirect("svc");
+    model->setDirect("routeId", "route_id");
+    model->setDirect("msgType", "msg_type");
 }
 
 QString ArchiveRecord::channelName() const

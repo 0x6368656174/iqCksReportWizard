@@ -54,6 +54,12 @@ public:
         Overlap
     };
 
+    enum ReportTemplate
+    {
+        NotSetTemplate,
+        StartDateTime,
+        EndDateTime
+    };
 
     explicit FilterItem(FilterItem *parent = Q_NULLPTR);
     ~FilterItem();
@@ -97,6 +103,9 @@ public:
     bool inverted() const;
     void setInverted(bool inverted);
 
+    ReportTemplate reportTemplate() const;
+    void setReportTemplate(ReportTemplate reportTemplate);
+
 private:
     FilterItem *m_parentFilter;
     QList<FilterItem *> m_childFilters;
@@ -104,6 +113,7 @@ private:
     Properties m_property;
     Operation m_operation;
     QVariant m_value;
+    ReportTemplate m_reportTemplate;
     Qt::CaseSensitivity m_caseSensitivity;
     bool m_inverted;
 };

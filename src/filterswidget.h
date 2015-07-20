@@ -40,9 +40,6 @@ private:
     void clear(bool warningDialogEnable) const;
     IqOrmAbstractFilter *createFilter(const FilterItem *filterItem,
                                       bool *abort) const;
-    QJsonObject createFilterJson(const FilterItem *filterItem) const;
-    bool createItemFromJson(const QJsonObject &filterObject,
-                            const QModelIndex &parentIndex) const;
 
 private:
     Ui::FiltersWidget *ui;

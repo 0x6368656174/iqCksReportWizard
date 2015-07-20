@@ -15,5 +15,11 @@
         <file>icons/plus.png</file>
         <file>icons/arrow-090.png</file>
         <file>icons/arrow-270.png</file>
+        <file>icons/report-excel.png</file>
+        <file>icons/table-delete-column.png</file>
+        <file>icons/table-delete-row.png</file>
+        <file>icons/table-insert-column.png</file>
+        <file>icons/table-insert-row.png</file>
+        <file>icons/script-import.png</file>
     </qresource>
 </RCC>

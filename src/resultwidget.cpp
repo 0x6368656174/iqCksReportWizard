@@ -7,7 +7,8 @@ ResultWidget::ResultWidget(QWidget *parent) :
     QGroupBox(parent),
     ui(new Ui::ResultWidget),
     m_findModel(new IqOrmModel<ArchiveRecord>(this)),
-    m_verticalSplitter(new QSplitter(this))
+    m_verticalSplitter(new QSplitter(this)),
+    m_horizontalSplitter(new QSplitter(this))
 {
     ui->setupUi(this);
     m_findModel->showProperty("objectId", tr("ID"));
@@ -23,9 +24,14 @@ ResultWidget::ResultWidget(QWidget *parent) :
     ui->resultTableView->setItemDelegate(new ResultItemDelegate(ui->resultTableView));
     ui->resultTableView->setModel(m_findModel);
 
+    m_horizontalSplitter->setOrientation(Qt::Horizontal);
+    m_horizontalSplitter->addWidget(ui->textGroupBox);
+    m_horizontalSplitter->addWidget(ui->journalGroupBox);
+
     m_verticalSplitter->setOrientation(Qt::Vertical);
     m_verticalSplitter->addWidget(ui->resultTableView);
-    m_verticalSplitter->addWidget(ui->textEdit);
+    m_verticalSplitter->addWidget(m_horizontalSplitter);
+
     ui->mainLayout->addWidget(m_verticalSplitter);
 
     connect(ui->resultTableView->selectionModel(), &QItemSelectionModel::currentChanged,
@@ -46,16 +52,24 @@ void ResultWidget::loadSettings()
     QSettings settigs;
     settigs.beginGroup("resultConfig");
     QVariantList columnWidths = settigs.value("resultTableColumnWidths").toList();
-    if (columnWidths.count() == m_findModel->columnCount()) {
+    if (columnWidths.count() >= m_findModel->columnCount()) {
         for (int i = 0; i < m_findModel->columnCount(); ++i) {
             ui->resultTableView->setColumnWidth(i, columnWidths[i].toInt());
         }
     }
+
     QList<int> verticalSplitterSizes;
     foreach (const QVariant &size, settigs.value("verticalSplitterSizes").toList()) {
         verticalSplitterSizes << size.toInt();
     }
     m_verticalSplitter->setSizes(verticalSplitterSizes);
+
+    QList<int> horizontalSplitterSizes;
+    foreach (const QVariant &size, settigs.value("horizontalSplitterSizes").toList()) {
+        horizontalSplitterSizes << size.toInt();
+    }
+    m_horizontalSplitter->setSizes(horizontalSplitterSizes);
+
     settigs.endGroup();
 }
 
@@ -68,11 +82,19 @@ void ResultWidget::saveSettings()
         columnWidths << ui->resultTableView->columnWidth(i);
     }
     settigs.setValue("resultTableColumnWidths", columnWidths);
+
     QVariantList verticalSplitterSizes;
     foreach (int size, m_verticalSplitter->sizes()) {
         verticalSplitterSizes << size;
     }
     settigs.setValue("verticalSplitterSizes", verticalSplitterSizes);
+
+    QVariantList horizontalSplitterSizes;
+    foreach (int size, m_horizontalSplitter->sizes()) {
+        horizontalSplitterSizes << size;
+    }
+    settigs.setValue("horizontalSplitterSizes", horizontalSplitterSizes);
+
     settigs.endGroup();
 }
 
@@ -80,8 +102,11 @@ void ResultWidget::showItemText(const QModelIndex &currentIndex, const QModelInd
 {
     Q_UNUSED(previosIndex);
     ArchiveRecord *record = m_findModel->get(currentIndex.row());
-    if(record)
-        ui->textEdit->setText(record->text());
-    else
-        ui->textEdit->clear();
+    if(record) {
+        ui->textTextEdit->setText(record->text());
+        ui->journalTextEdit->setText(record->journal());
+    } else {
+        ui->textTextEdit->clear();
+        ui->journalTextEdit->clear();
+    }
 }

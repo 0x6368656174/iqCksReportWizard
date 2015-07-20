@@ -30,6 +30,7 @@ private:
     Ui::ResultWidget *ui;
     IqOrmModel<ArchiveRecord> *m_findModel;
     QSplitter *m_verticalSplitter;
+    QSplitter *m_horizontalSplitter;
 };
 
 #endif // RESULTWIDGET_H

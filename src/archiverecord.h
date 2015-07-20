@@ -33,9 +33,6 @@ public:
 
     virtual void initializeOrmMetaModel(IqOrmMetaModel *model) const Q_DECL_OVERRIDE;
 
-protected:
-    virtual void reset() Q_DECL_OVERRIDE;
-
 public:
     QString channelName() const;
     void setChannelName(const QString &channelName);
